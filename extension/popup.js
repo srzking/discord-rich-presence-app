@@ -20,7 +20,6 @@ function applyLang() {
   document.documentElement.lang = lang;
   $$("[data-i18n]").forEach(el => { el.textContent = t(lang, el.dataset.i18n); });
   $$("[data-i18n-ph]").forEach(el => { el.placeholder = t(lang, el.dataset.i18nPh); });
-  // re-render platform list keep filter
   renderPlatforms();
 }
 
@@ -29,6 +28,7 @@ $$(".tabs button").forEach(b => b.addEventListener("click", () => {
   $$(".pane").forEach(x => x.classList.remove("active"));
   b.classList.add("active");
   $(`[data-pane="${b.dataset.tab}"]`).classList.add("active");
+  if (b.dataset.tab === "logs") loadLogs();
 }));
 
 let cachedDisabled = new Set();
@@ -65,16 +65,32 @@ async function load() {
   refreshStatus();
 }
 
+function renderBot(botUser, connected) {
+  const card = $("#botCard");
+  if (!botUser) { card.classList.add("hidden"); return; }
+  card.classList.remove("hidden");
+  $("#botName").textContent = botUser.username;
+  $("#botPing").className = "pill " + (connected ? "on" : "off");
+  const av = botUser.avatar
+    ? `https://cdn.discordapp.com/avatars/${botUser.id}/${botUser.avatar}.png?size=64`
+    : `https://cdn.discordapp.com/embed/avatars/${(parseInt(botUser.id) >> 22) % 6}.png`;
+  $("#botAvatar").src = av;
+}
+
 function refreshStatus() {
   chrome.runtime.sendMessage({ type: "status:get" }, async (res) => {
     if (chrome.runtime.lastError || !res) return;
     const pill = $("#statusPill");
     pill.textContent = t(lang, res.connected ? "connected" : "offline");
     pill.className = "pill " + (res.connected ? "on" : "off");
+    renderBot(res.botUser, res.connected);
     const a = res.activity;
     $("#actName").textContent = a ? a.name : "—";
     $("#actDetails").textContent = a?.details || "";
     $("#actState").textContent = a?.state || "";
+    const thumb = $("#actThumb");
+    if (a?.thumbnail) { thumb.src = a.thumbnail; thumb.classList.remove("hidden"); }
+    else thumb.classList.add("hidden");
     const { trackedToday = {} } = await chrome.storage.local.get("trackedToday");
     const today = new Date().toISOString().slice(0,10);
     $("#todayMin").textContent = Math.round((trackedToday[today] || 0) / 60);
@@ -85,6 +101,17 @@ async function send(data, reconnect = false) {
   return new Promise(r => chrome.runtime.sendMessage({ type: "config:save", data, reconnect }, r));
 }
 
+async function loadLogs() {
+  chrome.runtime.sendMessage({ type: "logs:get" }, (res) => {
+    const list = $("#logList");
+    if (!res?.logs?.length) { list.innerHTML = `<div class="muted small" style="padding:14px;text-align:center">${t(lang,"noLogs")}</div>`; return; }
+    list.innerHTML = res.logs.map(l => {
+      const time = new Date(l.t).toLocaleTimeString();
+      return `<div class="log log-${l.level}"><span class="log-time">${time}</span><span class="log-msg">${l.message}</span></div>`;
+    }).join("");
+  });
+}
+
 $("#lang").addEventListener("change", async () => {
   lang = $("#lang").value;
   await send({ lang });
@@ -93,11 +120,30 @@ $("#lang").addEventListener("change", async () => {
 });
 
 $("#save").addEventListener("click", async () => {
-  const data = { token: $("#token").value.trim(), appId: $("#appId").value.trim() };
-  if (!data.token) return alert(t(lang, "enterToken"));
-  $("#save").disabled = true; $("#save").textContent = t(lang, "connecting");
-  await send(data, true);
-  setTimeout(() => { $("#save").disabled = false; $("#save").textContent = t(lang, "saveConnect"); refreshStatus(); }, 800);
+  const token = $("#token").value.trim();
+  const appId = $("#appId").value.trim();
+  if (!token) return alert(t(lang, "enterToken"));
+  $("#save").disabled = true; $("#save").textContent = t(lang, "loggingIn");
+  const status = $("#loginStatus");
+  status.className = "login-status info"; status.classList.remove("hidden");
+  status.textContent = t(lang, "validating");
+  // Test token first
+  chrome.runtime.sendMessage({ type: "auth:test", token }, async (res) => {
+    if (!res?.ok) {
+      status.className = "login-status err";
+      status.textContent = t(lang, "loginFailed") + (res?.status ? ` (${res.status})` : "");
+      $("#save").disabled = false; $("#save").textContent = t(lang, "loginConnect");
+      return;
+    }
+    status.className = "login-status ok";
+    status.textContent = `✓ ${t(lang, "loggedAs")} ${res.user.username}`;
+    await send({ token, appId }, true);
+    setTimeout(() => {
+      $("#save").disabled = false;
+      $("#save").textContent = t(lang, "loginConnect");
+      refreshStatus();
+    }, 800);
+  });
 });
 
 $("#statusSel").addEventListener("change", () => send({ status: $("#statusSel").value }));
@@ -110,9 +156,11 @@ $("#saveCustom").addEventListener("click", () =>
 $("#clearCustom").addEventListener("click", async () => { $("#customText").value = ""; await send({ customText: "" }); });
 
 $("#clear").addEventListener("click", () => chrome.runtime.sendMessage({ type: "presence:clear" }, refreshStatus));
-$("#disconnectBtn").addEventListener("click", () => chrome.runtime.sendMessage({ type: "disconnect" }, refreshStatus));
+$("#disconnectBtn").addEventListener("click", () => chrome.runtime.sendMessage({ type: "disconnect" }, () => { refreshStatus(); load(); }));
 
 $("#appSearch").addEventListener("input", renderPlatforms);
+$("#refreshLogs").addEventListener("click", loadLogs);
+$("#clearLogs").addEventListener("click", () => chrome.runtime.sendMessage({ type: "logs:clear" }, loadLogs));
 
 function savePlatforms() {
   const disabled = [...$$("#platformList input")].filter(i => !i.checked).map(i => i.dataset.pid);
@@ -122,7 +170,7 @@ function savePlatforms() {
 
 $("#exportBtn").addEventListener("click", async () => {
   const cfg = await chrome.storage.local.get(null);
-  delete cfg.token; // never export token
+  delete cfg.token;
   const blob = new Blob([JSON.stringify(cfg, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -138,6 +186,11 @@ $("#importFile").addEventListener("change", async (e) => {
     alert(t(lang, "imported"));
     load();
   } catch { alert(t(lang, "invalidFile")); }
+});
+
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === "log:new" && $("[data-pane='logs']").classList.contains("active")) loadLogs();
+  if (msg.type === "auth:ok" || msg.type === "auth:failed") refreshStatus();
 });
 
 load();

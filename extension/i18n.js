@@ -25,6 +25,9 @@ const I18N = {
     exportCfg: "Export config", importCfg: "Import config",
     imported: "Settings imported.",
     invalidFile: "Invalid config file.",
+    logs: "Logs", refresh: "Refresh", clearLogs: "Clear", noLogs: "No logs yet.",
+    loginConnect: "Login & Connect", loggingIn: "Logging in…", validating: "Validating token…",
+    loginFailed: "Login failed — check token", loggedAs: "Logged in as",
   },
   pt: {
     enable: "Ativar / desativar",
@@ -51,6 +54,9 @@ const I18N = {
     exportCfg: "Exportar config", importCfg: "Importar config",
     imported: "Definições importadas.",
     invalidFile: "Ficheiro inválido.",
+    logs: "Registos", refresh: "Atualizar", clearLogs: "Limpar", noLogs: "Sem registos.",
+    loginConnect: "Entrar e Conectar", loggingIn: "A entrar…", validating: "A validar token…",
+    loginFailed: "Falha no login — verifica o token", loggedAs: "Ligado como",
   },
   es: {
     enable: "Activar / desactivar",
@@ -77,6 +83,9 @@ const I18N = {
     exportCfg: "Exportar config", importCfg: "Importar config",
     imported: "Ajustes importados.",
     invalidFile: "Archivo inválido.",
+    logs: "Registros", refresh: "Actualizar", clearLogs: "Limpiar", noLogs: "Sin registros.",
+    loginConnect: "Iniciar sesión", loggingIn: "Iniciando…", validating: "Validando token…",
+    loginFailed: "Error de inicio — revisa el token", loggedAs: "Conectado como",
   }
 };
 function t(lang, key) { return (I18N[lang] || I18N.en)[key] || I18N.en[key] || key; }

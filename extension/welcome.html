@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+<div class="welcome-bg"></div>
 <div class="welcome">
   <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
     <select id="wlang" class="mini lang-sel">
@@ -20,32 +21,41 @@
     </div>
   </div>
 
-  <p data-k="intro">Aura shows what you're watching, listening to, or browsing on your Discord profile — automatically. Works across YouTube, Netflix, Spotify, Twitch and more.</p>
+  <p data-k="intro">Aura shows what you're watching, listening to, or browsing on your Discord profile — automatically.</p>
 
   <div class="card">
     <h2 data-k="setupH">Setup in 2 minutes</h2>
     <ol>
-      <li data-k="s1">Open the Discord Developer Portal and create a new Application.</li>
+      <li data-k="s1">Open the <a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a> and create a new Application.</li>
       <li data-k="s2">Go to the Bot tab → Reset Token → copy the token.</li>
-      <li data-k="s3">Copy the Application ID from General Information (optional, only for images).</li>
+      <li data-k="s3">Copy the Application ID from General Information (optional).</li>
       <li data-k="s4">Invite the bot to any server you're in.</li>
-      <li data-k="s5">Click the Aura icon, paste both values, hit Save & Connect.</li>
+      <li data-k="s5">Click the Aura icon, paste both values, hit Login & Connect.</li>
       <li data-k="s6">Browse a supported site — your status updates automatically.</li>
     </ol>
   </div>
 
   <div class="card">
     <h2 data-k="featH">What Aura can do</h2>
+    <div class="feature-grid">
+      <div class="feat"><strong data-k="f1t">Auto-detect</strong><span data-k="f1">Activity on 27+ sites in real time</span></div>
+      <div class="feat"><strong data-k="f2t">Auto thumbnails</strong><span data-k="f2">Page cover images shown in your presence</span></div>
+      <div class="feat"><strong data-k="f3t">Custom activity</strong><span data-k="f3">Override Playing / Watching / Listening</span></div>
+      <div class="feat"><strong data-k="f4t">Per-site toggles</strong><span data-k="f4">Disable any site, with search</span></div>
+      <div class="feat"><strong data-k="f5t">Auto-idle</strong><span data-k="f5">Idle status when AFK</span></div>
+      <div class="feat"><strong data-k="f6t">Privacy</strong><span data-k="f6">Skips incognito tabs</span></div>
+      <div class="feat"><strong data-k="f7t">Live logs</strong><span data-k="f7">Activity & connection events</span></div>
+      <div class="feat"><strong data-k="f8t">Time tracker</strong><span data-k="f8">Daily activity counter</span></div>
+      <div class="feat"><strong data-k="f9t">Multilingual</strong><span data-k="f9">EN / PT / ES included</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-k="tipsH">Tips</h2>
     <ul>
-      <li data-k="f1">Auto-detect activity on 27+ websites</li>
-      <li data-k="f2">Custom activity override (Playing / Watching / Listening / Competing)</li>
-      <li data-k="f3">Per-site toggles with search</li>
-      <li data-k="f4">Auto-idle when AFK</li>
-      <li data-k="f5">Skip incognito tabs for privacy</li>
-      <li data-k="f6">Master on/off switch</li>
-      <li data-k="f7">Daily time-tracked counter</li>
-      <li data-k="f8">Export & import settings</li>
-      <li data-k="f9">English, Português and Español</li>
+      <li data-k="t1">Your bot token never leaves your browser.</li>
+      <li data-k="t2">Use the master switch in the popup to instantly pause Aura.</li>
+      <li data-k="t3">The Logs tab shows every detection and reconnect event.</li>
     </ul>
   </div>
 
@@ -54,9 +64,9 @@
 <script src="i18n.js"></script>
 <script>
 const D = {
-  en: { tag:"Rich Presence for the web.", intro:"Aura shows what you're watching, listening to, or browsing on your Discord profile — automatically. Works across YouTube, Netflix, Spotify, Twitch and more.", setupH:"Setup in 2 minutes", s1:"Open the Discord Developer Portal and create a new Application.", s2:"Go to the Bot tab → Reset Token → copy the token.", s3:"Copy the Application ID from General Information (optional, only for images).", s4:"Invite the bot to any server you're in.", s5:"Click the Aura icon, paste both values, hit Save & Connect.", s6:"Browse a supported site — your status updates automatically.", featH:"What Aura can do", f1:"Auto-detect activity on 27+ websites", f2:"Custom activity override (Playing / Watching / Listening / Competing)", f3:"Per-site toggles with search", f4:"Auto-idle when AFK", f5:"Skip incognito tabs for privacy", f6:"Master on/off switch", f7:"Daily time-tracked counter", f8:"Export & import settings", f9:"English, Português and Español", go:"Got it — let's go" },
-  pt: { tag:"Rich Presence para a web.", intro:"O Aura mostra o que estás a ver, ouvir ou a navegar no teu perfil do Discord — automaticamente. Funciona em YouTube, Netflix, Spotify, Twitch e muito mais.", setupH:"Configura em 2 minutos", s1:"Abre o Discord Developer Portal e cria uma nova Aplicação.", s2:"Vai a Bot → Reset Token → copia o token.", s3:"Copia o Application ID em General Information (opcional, só para imagens).", s4:"Adiciona o bot a um servidor onde estejas.", s5:"Clica no ícone do Aura, cola os dois valores, carrega em Guardar e Conectar.", s6:"Abre um site suportado — o teu estado atualiza-se sozinho.", featH:"O que o Aura faz", f1:"Deteta atividade em mais de 27 sites", f2:"Atividade personalizada (Jogar / Ver / Ouvir / Competir)", f3:"Ativar/desativar sites com pesquisa", f4:"Auto-ausente quando AFK", f5:"Ignora separadores anónimos", f6:"Botão geral on/off", f7:"Contador diário de tempo", f8:"Exportar e importar definições", f9:"Inglês, Português e Espanhol", go:"Entendido — vamos lá" },
-  es: { tag:"Rich Presence para la web.", intro:"Aura muestra lo que ves, escuchas o navegas en tu perfil de Discord — automáticamente. Funciona en YouTube, Netflix, Spotify, Twitch y más.", setupH:"Configura en 2 minutos", s1:"Abre el Discord Developer Portal y crea una Aplicación.", s2:"Ve a Bot → Reset Token → copia el token.", s3:"Copia el Application ID en General Information (opcional, solo para imágenes).", s4:"Añade el bot a un servidor donde estés.", s5:"Pulsa el icono de Aura, pega ambos valores, Guardar y Conectar.", s6:"Abre un sitio compatible — tu estado se actualiza solo.", featH:"Qué puede hacer Aura", f1:"Detecta actividad en más de 27 sitios", f2:"Actividad personalizada (Jugando / Viendo / Escuchando / Compitiendo)", f3:"Activar/desactivar sitios con búsqueda", f4:"Auto-ausente cuando AFK", f5:"Ignora pestañas de incógnito", f6:"Interruptor general on/off", f7:"Contador diario de tiempo", f8:"Exportar e importar ajustes", f9:"Inglés, Português y Español", go:"Entendido — vamos" }
+  en: { tag:"Rich Presence for the web.", intro:"Aura shows what you're watching, listening to, or browsing on your Discord profile — automatically. Works across 27+ web platforms.", setupH:"Setup in 2 minutes", s1:"Open the Discord Developer Portal and create a new Application.", s2:"Go to the Bot tab → Reset Token → copy the token.", s3:"Copy the Application ID from General Information (optional).", s4:"Invite the bot to any server you're in.", s5:"Click the Aura icon, paste both values, hit Login & Connect.", s6:"Browse a supported site — your status updates automatically.", featH:"What Aura can do", f1t:"Auto-detect", f1:"Activity on 27+ sites in real time", f2t:"Auto thumbnails", f2:"Page cover images shown in your presence", f3t:"Custom activity", f3:"Override Playing / Watching / Listening", f4t:"Per-site toggles", f4:"Disable any site, with search", f5t:"Auto-idle", f5:"Idle status when AFK", f6t:"Privacy", f6:"Skips incognito tabs", f7t:"Live logs", f7:"Activity & connection events", f8t:"Time tracker", f8:"Daily activity counter", f9t:"Multilingual", f9:"EN / PT / ES included", tipsH:"Tips", t1:"Your bot token never leaves your browser.", t2:"Use the master switch to instantly pause Aura.", t3:"The Logs tab shows every detection and reconnect event.", go:"Got it — let's go" },
+  pt: { tag:"Rich Presence para a web.", intro:"O Aura mostra o que estás a ver, ouvir ou a navegar no teu perfil do Discord — automaticamente. Funciona em 27+ plataformas.", setupH:"Configura em 2 minutos", s1:"Abre o Discord Developer Portal e cria uma nova Aplicação.", s2:"Vai a Bot → Reset Token → copia o token.", s3:"Copia o Application ID em General Information (opcional).", s4:"Adiciona o bot a um servidor onde estejas.", s5:"Clica no ícone do Aura, cola os dois valores, Entrar e Conectar.", s6:"Abre um site suportado — o teu estado atualiza-se sozinho.", featH:"O que o Aura faz", f1t:"Auto-deteção", f1:"Atividade em 27+ sites em tempo real", f2t:"Miniaturas auto", f2:"Imagens da página no teu estado", f3t:"Atividade custom", f3:"Personaliza a jogar / ver / ouvir", f4t:"Toggles por site", f4:"Desativa sites com pesquisa", f5t:"Auto-ausente", f5:"Estado ausente quando AFK", f6t:"Privacidade", f6:"Ignora separadores anónimos", f7t:"Logs ao vivo", f7:"Eventos de atividade e ligação", f8t:"Contador", f8:"Tempo diário", f9t:"Multilíngua", f9:"EN / PT / ES incluído", tipsH:"Dicas", t1:"O token nunca sai do navegador.", t2:"Usa o switch geral para parar o Aura.", t3:"O separador Logs mostra deteções e reconexões.", go:"Entendido — vamos lá" },
+  es: { tag:"Rich Presence para la web.", intro:"Aura muestra lo que ves, escuchas o navegas en tu perfil de Discord — automáticamente. Funciona en 27+ plataformas.", setupH:"Configura en 2 minutos", s1:"Abre el Discord Developer Portal y crea una Aplicación.", s2:"Ve a Bot → Reset Token → copia el token.", s3:"Copia el Application ID en General Information (opcional).", s4:"Añade el bot a un servidor donde estés.", s5:"Pulsa el icono de Aura, pega ambos valores, Iniciar sesión.", s6:"Abre un sitio compatible — tu estado se actualiza solo.", featH:"Qué puede hacer Aura", f1t:"Auto-detección", f1:"Actividad en 27+ sitios en tiempo real", f2t:"Miniaturas auto", f2:"Imágenes de la página en tu presencia", f3t:"Actividad custom", f3:"Jugando / Viendo / Escuchando", f4t:"Toggles por sitio", f4:"Desactiva sitios con búsqueda", f5t:"Auto-ausente", f5:"Estado ausente cuando AFK", f6t:"Privacidad", f6:"Ignora pestañas incógnito", f7t:"Logs en vivo", f7:"Eventos de actividad y conexión", f8t:"Contador", f8:"Tiempo diario", f9t:"Multilingüe", f9:"EN / PT / ES incluido", tipsH:"Consejos", t1:"Tu token nunca sale del navegador.", t2:"Usa el interruptor general para pausar Aura al instante.", t3:"La pestaña Logs muestra cada detección y reconexión.", go:"Entendido — vamos" }
 };
 async function apply(l){
   document.querySelectorAll("[data-k]").forEach(e=>{ e.textContent = (D[l]||D.en)[e.dataset.k]; });

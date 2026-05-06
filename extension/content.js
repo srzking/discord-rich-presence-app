@@ -55,11 +55,22 @@
     { id: "tiktok", match: h => h.includes("tiktok.com"), detect: () => ({ name: "TikTok", type: 3, details: "Watching TikToks", state: document.title.split("|")[0]?.trim() }) },
   ];
 
+  function getThumb() {
+    const og = document.querySelector('meta[property="og:image"]')?.content
+      || document.querySelector('meta[name="twitter:image"]')?.content
+      || document.querySelector('link[rel="icon"]')?.href;
+    if (og && /^https?:\/\//i.test(og)) return og;
+    return undefined;
+  }
+
   function detect() {
     const host = location.hostname;
     for (const p of PLATFORMS) {
       if (p.match(host)) {
-        try { const r = p.detect(); if (r) return { id: p.id, ...r }; } catch {}
+        try {
+          const r = p.detect();
+          if (r) return { id: p.id, thumbnail: getThumb(), url: location.href, ...r };
+        } catch {}
       }
     }
     return null;

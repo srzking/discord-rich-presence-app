@@ -23,11 +23,21 @@
     </div>
   </header>
 
+  <div id="botCard" class="bot-card hidden">
+    <img id="botAvatar" alt="" />
+    <div>
+      <div class="muted small" data-i18n="loggedAs">Logged in as</div>
+      <strong id="botName">—</strong>
+    </div>
+    <span id="botPing" class="pill on">●</span>
+  </div>
+
   <div class="tabs">
     <button data-tab="now" data-i18n="now" class="active">Now</button>
     <button data-tab="account" data-i18n="account">Account</button>
     <button data-tab="custom" data-i18n="custom">Custom</button>
     <button data-tab="apps" data-i18n="apps">Apps</button>
+    <button data-tab="logs" data-i18n="logs">Logs</button>
     <button data-tab="settings" data-i18n="settings">Settings</button>
   </div>
 
@@ -42,10 +52,15 @@
       </select>
     </div>
     <div class="now-card">
-      <div class="muted" data-i18n="nowShowing">Now showing</div>
-      <div id="actName">—</div>
-      <div id="actDetails" class="sub"></div>
-      <div id="actState" class="sub"></div>
+      <div class="now-head">
+        <img id="actThumb" class="thumb hidden" alt="" />
+        <div class="now-text">
+          <div class="muted" data-i18n="nowShowing">Now showing</div>
+          <div id="actName">—</div>
+          <div id="actDetails" class="sub"></div>
+          <div id="actState" class="sub"></div>
+        </div>
+      </div>
     </div>
     <div class="stats">
       <div><span class="muted small" data-i18n="todayTracked">Tracked today</span><strong id="todayMin">0</strong> <span data-i18n="minutes">min</span></div>
@@ -58,7 +73,8 @@
     <input id="token" type="password" placeholder="MTk4..." />
     <label><span data-i18n="appId">Application ID</span> <span class="muted" data-i18n="appIdHint">(for images)</span></label>
     <input id="appId" type="text" placeholder="123456789012345678" />
-    <button id="save" class="primary full" data-i18n="saveConnect">Save & Connect</button>
+    <button id="save" class="primary full" data-i18n="loginConnect">Login & Connect</button>
+    <div id="loginStatus" class="login-status hidden"></div>
     <p class="hint"><span data-i18n="helpHint">Need help?</span> <a href="welcome.html" target="_blank" data-i18n="setupGuide">Read the setup guide →</a></p>
   </section>
 
@@ -80,6 +96,14 @@
     <p class="muted small" data-i18n="toggleSites">Toggle which sites are tracked.</p>
     <input id="appSearch" type="text" placeholder="Search…" class="search" />
     <div id="platformList" class="platform-list"></div>
+  </section>
+
+  <section data-pane="logs" class="pane">
+    <div class="row">
+      <button id="refreshLogs" class="ghost" data-i18n="refresh">Refresh</button>
+      <button id="clearLogs" class="ghost" data-i18n="clearLogs">Clear logs</button>
+    </div>
+    <div id="logList" class="log-list"></div>
   </section>
 
   <section data-pane="settings" class="pane">

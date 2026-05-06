@@ -1,5 +1,6 @@
 // Aura background service worker
 const GATEWAY_URL = "wss://gateway.discord.gg/?v=10&encoding=json";
+const API = "https://discord.com/api/v10";
 
 let ws = null;
 let heartbeatInterval = null;
@@ -14,7 +15,7 @@ let userIdle = false;
 async function getCfg() {
   return await chrome.storage.local.get([
     "token", "appId", "status", "customText", "customType",
-    "disabledPlatforms", "idleAway", "skipIncognito", "enabled"
+    "disabledPlatforms", "idleAway", "skipIncognito", "enabled", "botUser"
   ]);
 }
 
@@ -23,10 +24,52 @@ function setBadge(text, color = "#5865F2") {
   chrome.action.setBadgeText({ text });
 }
 
+async function log(level, message, meta) {
+  const { logs = [] } = await chrome.storage.local.get("logs");
+  logs.unshift({ t: Date.now(), level, message, meta });
+  if (logs.length > 100) logs.length = 100;
+  await chrome.storage.local.set({ logs });
+  chrome.runtime.sendMessage({ type: "log:new" }).catch(() => {});
+}
+
+async function validateToken(token) {
+  try {
+    const r = await fetch(`${API}/users/@me`, { headers: { Authorization: `Bot ${token}` } });
+    if (!r.ok) return { ok: false, status: r.status, error: await r.text() };
+    const user = await r.json();
+    return { ok: true, user };
+  } catch (e) {
+    return { ok: false, error: String(e) };
+  }
+}
+
+async function loginAndConnect() {
+  const cfg = await getCfg();
+  if (!cfg.token) { setBadge("!", "#ED4245"); await log("warn", "No bot token set"); return; }
+  if (cfg.enabled === false) { setBadge("off", "#747F8D"); return; }
+
+  setBadge("…", "#FAA61A");
+  const v = await validateToken(cfg.token);
+  if (!v.ok) {
+    setBadge("err", "#ED4245");
+    await log("error", "Login failed", { status: v.status });
+    await chrome.storage.local.set({ botUser: null, lastError: v.error || `HTTP ${v.status}` });
+    chrome.runtime.sendMessage({ type: "auth:failed", status: v.status }).catch(() => {});
+    return;
+  }
+  await chrome.storage.local.set({
+    botUser: { id: v.user.id, username: v.user.username, avatar: v.user.avatar, discriminator: v.user.discriminator },
+    lastError: null
+  });
+  await log("info", `Logged in as ${v.user.username}`, { id: v.user.id });
+  chrome.runtime.sendMessage({ type: "auth:ok", user: v.user }).catch(() => {});
+  await connect();
+}
+
 async function connect() {
   if (connecting) return;
   const cfg = await getCfg();
-  if (!cfg.token) { setBadge("!", "#ED4245"); return; }
+  if (!cfg.token) return;
   if (cfg.enabled === false) { setBadge("off", "#747F8D"); return; }
   connecting = true;
   try {
@@ -34,10 +77,13 @@ async function connect() {
     ws = new WebSocket(resumeUrl ? `${resumeUrl}/?v=10&encoding=json` : GATEWAY_URL);
     ws.onopen = () => setBadge("…", "#FAA61A");
     ws.onmessage = (e) => handle(JSON.parse(e.data));
-    ws.onclose = () => {
+    ws.onclose = (e) => {
       identified = false;
       if (heartbeatInterval) clearInterval(heartbeatInterval);
       setBadge("off", "#747F8D");
+      log("warn", `Gateway closed (${e.code})`);
+      // 4004 = invalid token, don't loop
+      if (e.code === 4004) return;
       setTimeout(() => { connecting = false; connect(); }, 5000);
     };
     ws.onerror = () => {};
@@ -76,6 +122,7 @@ async function handle(payload) {
       if (t === "READY") {
         identified = true; sessionId = d.session_id; resumeUrl = d.resume_gateway_url;
         connecting = false; setBadge("on", "#3BA55D");
+        log("info", "Connected to Discord gateway");
       } else if (t === "RESUMED") {
         identified = true; connecting = false; setBadge("on", "#3BA55D");
       }
@@ -94,7 +141,6 @@ async function buildPresence(activity) {
   const cfg = await getCfg();
   const status = userIdle && cfg.idleAway ? "idle" : (cfg.status || "online");
 
-  // Custom override
   let act = activity;
   if (cfg.customText) {
     act = {
@@ -104,12 +150,11 @@ async function buildPresence(activity) {
       details: cfg.customText
     };
   }
-
-  // Platform disabled?
   if (act && cfg.disabledPlatforms?.includes(act.id)) act = null;
-
   if (!act) return { since: 0, activities: [], status, afk: false };
 
+  // Auto thumbnail: prefer page-provided image (og:image)
+  const largeImage = act.thumbnail || (cfg.appId ? act.id : undefined);
   const a = {
     name: act.name,
     type: act.type ?? 0,
@@ -117,7 +162,14 @@ async function buildPresence(activity) {
     details: act.details || undefined,
     state: act.state || undefined,
     timestamps: act.startTimestamp ? { start: act.startTimestamp } : { start: Date.now() },
-    assets: cfg.appId ? { large_image: act.id, large_text: act.name } : undefined
+    assets: largeImage ? {
+      large_image: largeImage,
+      large_text: act.name,
+      small_image: act.smallImage || undefined,
+      small_text: act.smallText || undefined
+    } : undefined,
+    buttons: act.url ? ["Open"] : undefined,
+    metadata: act.url ? { button_urls: [act.url] } : undefined
   };
   return { since: 0, activities: [a], status, afk: false };
 }
@@ -136,7 +188,6 @@ async function tickTracking() {
   const today = new Date().toISOString().slice(0, 10);
   const { trackedToday = {} } = await chrome.storage.local.get("trackedToday");
   trackedToday[today] = (trackedToday[today] || 0) + delta;
-  // prune old
   for (const k of Object.keys(trackedToday)) if (k < today.slice(0,8) + "01") delete trackedToday[k];
   await chrome.storage.local.set({ trackedToday });
 }
@@ -147,21 +198,37 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "presence:update") {
       const cfg = await getCfg();
       if (cfg.skipIncognito && sender.tab?.incognito) { sendResponse({ ok: true, skipped: true }); return; }
+      const prevId = lastActivity?.id;
       lastActivity = msg.activity;
+      if (msg.activity && msg.activity.id !== prevId) {
+        log("info", `Detected: ${msg.activity.name}`, { details: msg.activity.details });
+      }
       await pushPresence();
       sendResponse({ ok: true });
     } else if (msg.type === "config:save") {
       await chrome.storage.local.set(msg.data);
-      if (msg.reconnect) { sessionId = null; resumeUrl = null; await connect(); }
+      if (msg.reconnect) { sessionId = null; resumeUrl = null; await loginAndConnect(); }
       else await pushPresence();
       sendResponse({ ok: true });
     } else if (msg.type === "status:get") {
-      sendResponse({ connected: identified, activity: lastActivity });
+      const { botUser, lastError } = await chrome.storage.local.get(["botUser", "lastError"]);
+      sendResponse({ connected: identified, activity: lastActivity, botUser, lastError });
     } else if (msg.type === "presence:clear") {
       lastActivity = null; await pushPresence(); sendResponse({ ok: true });
     } else if (msg.type === "disconnect") {
       try { ws?.close(); } catch {}
+      await chrome.storage.local.set({ botUser: null });
+      await log("info", "Disconnected");
       sendResponse({ ok: true });
+    } else if (msg.type === "logs:get") {
+      const { logs = [] } = await chrome.storage.local.get("logs");
+      sendResponse({ logs });
+    } else if (msg.type === "logs:clear") {
+      await chrome.storage.local.set({ logs: [] });
+      sendResponse({ ok: true });
+    } else if (msg.type === "auth:test") {
+      const v = await validateToken(msg.token);
+      sendResponse(v);
     }
   })();
   return true;
@@ -178,9 +245,9 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
     await chrome.storage.local.set({ enabled: true, status: "online", idleAway: true, skipIncognito: true });
     chrome.tabs.create({ url: chrome.runtime.getURL("welcome.html") });
   }
-  connect();
+  loginAndConnect();
 });
-chrome.runtime.onStartup.addListener(() => connect());
+chrome.runtime.onStartup.addListener(() => loginAndConnect());
 chrome.alarms.create("ka", { periodInMinutes: 0.4 });
-chrome.alarms.onAlarm.addListener(() => { if (ws?.readyState !== 1) connect(); });
-connect();
+chrome.alarms.onAlarm.addListener(() => { if (ws?.readyState !== 1) loginAndConnect(); });
+loginAndConnect();
