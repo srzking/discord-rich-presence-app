@@ -94,5 +94,5 @@ const I18N = {
     manageSettings: "Gestionar ajustes", resetAll: "Restablecer todo", resetConfirm: "¿Restablecer todos los ajustes y desconectar?",
   }
 };
-function t(lang, key) { return (I18N[lang] || I18N.en)[key] || I18N.en[key] || key; }
-if (typeof window !== "undefined") window.__I18N__ = { I18N, t };
+function __aura_t(lang, key) { return (I18N[lang] || I18N.en)[key] || I18N.en[key] || key; }
+if (typeof window !== "undefined") window.__I18N__ = { I18N, t: __aura_t };
