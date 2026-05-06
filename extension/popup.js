@@ -188,6 +188,12 @@ $("#importFile").addEventListener("change", async (e) => {
   } catch { alert(t(lang, "invalidFile")); }
 });
 
+$("#resetBtn")?.addEventListener("click", async () => {
+  if (!confirm(t(lang, "resetConfirm"))) return;
+  await new Promise(r => chrome.storage.local.clear(r));
+  chrome.runtime.sendMessage({ type: "disconnect" }, () => load());
+});
+
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === "log:new" && $("[data-pane='logs']").classList.contains("active")) loadLogs();
   if (msg.type === "auth:ok" || msg.type === "auth:failed") refreshStatus();

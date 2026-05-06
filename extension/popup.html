@@ -69,9 +69,10 @@
   </section>
 
   <section data-pane="account" class="pane">
-    <label data-i18n="botToken">Bot Token</label>
-    <input id="token" type="password" placeholder="MTk4..." />
-    <label><span data-i18n="appId">Application ID</span> <span class="muted" data-i18n="appIdHint">(for images)</span></label>
+    <label data-i18n="userToken">Discord Token</label>
+    <input id="token" type="password" placeholder="..." />
+    <p class="muted small" data-i18n="userTokenHint">Your token logs you in as your own account so the activity appears on your profile.</p>
+    <label><span data-i18n="appId">Application ID</span> <span class="muted" data-i18n="appIdHint">(optional, for images)</span></label>
     <input id="appId" type="text" placeholder="123456789012345678" />
     <button id="save" class="primary full" data-i18n="loginConnect">Login & Connect</button>
     <div id="loginStatus" class="login-status hidden"></div>
@@ -115,12 +116,14 @@
       <input id="skipIncognito" type="checkbox" />
       <span data-i18n="skipIncog">Don't track incognito tabs</span>
     </label>
+    <h3 class="muted small" style="margin-top:14px" data-i18n="manageSettings">Manage settings</h3>
     <div class="row">
-      <button id="exportBtn" class="ghost" data-i18n="exportCfg">Export config</button>
-      <button id="importBtn" class="ghost" data-i18n="importCfg">Import config</button>
+      <button id="exportBtn" class="ghost" data-i18n="exportCfg">Export</button>
+      <button id="importBtn" class="ghost" data-i18n="importCfg">Import</button>
       <input id="importFile" type="file" accept="application/json" hidden />
     </div>
-    <button id="disconnectBtn" class="ghost full" data-i18n="disconnect">Disconnect bot</button>
+    <button id="disconnectBtn" class="ghost full" data-i18n="disconnect">Disconnect</button>
+    <button id="resetBtn" class="ghost full" data-i18n="resetAll" style="color:var(--red);border-color:rgba(237,66,69,.3)">Reset everything</button>
   </section>
 
   <script src="i18n.js"></script>

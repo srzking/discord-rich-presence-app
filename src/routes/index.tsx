@@ -20,7 +20,7 @@ const T: Record<Lang, Record<string, string>> = {
     badge: "Discord Rich Presence · for the web",
     h1a: "Your aura,", h1b: "wherever you browse.",
     sub: "A tiny Chrome extension that updates your Discord profile with whatever you're watching, listening to, or doing on the web.",
-    download: "Download Aura", how: "How it works",
+    download: "Download Aura", how: "How it works", tag_short: "Discord Rich Presence — for the open web.",
     free: "Free · Chromium browsers · No account required",
     feat_h: "Built for control.",
     f1t: "Auto-detect", f1d: "Recognises your activity on 27+ web platforms in real time.",
@@ -36,12 +36,12 @@ const T: Record<Lang, Record<string, string>> = {
     setup_h: "Setup in under 2 minutes.",
     s1t: "Download & unzip", s1d: "Click Download Aura above and unzip the file.",
     s2t: "Load it in Chrome", s2d_pre: "Open ", s2d_post: ", enable Developer mode, click Load unpacked and select the folder.",
-    s3t: "Create a Discord bot", s3d: "Visit the Developer Portal, make an app, copy the Bot Token and Application ID.",
-    s4t: "Connect", s4d: "Open the Aura popup → Account → paste both → Save & Connect.",
-    s5t: "You're live", s5d: "Browse a supported site. Your Discord status updates automatically.",
+    s3t: "Get your Discord token", s3d: "Open Discord in browser → DevTools → Network → copy the Authorization header from any request.",
+    s4t: "Connect", s4d: "Open the Aura popup → Account → paste your token → Login & Connect.",
+    s5t: "You're live", s5d: "Browse a supported site. Your Discord profile updates automatically.",
     faq_h: "Frequently asked.",
-    q1: "Is it safe to enter my bot token?", a1: "Your token never leaves your browser. It's stored locally in extension storage and connects directly to Discord's gateway.",
-    q2: "Why a bot and not my user account?", a2: "Self-bots violate Discord's Terms of Service. Bots are the official, safe way to set custom presence.",
+    q1: "Is it safe to enter my token?", a1: "Your token never leaves your browser. It's stored locally and connects directly to Discord's gateway.",
+    q2: "Will my account get banned?", a2: "Aura behaves like the official client and only updates your presence — but using user tokens is at your own risk per Discord's TOS. Use a bot token if you want zero risk.",
     q3: "Will it slow down my browser?", a3: "Aura uses a tiny background WebSocket and reads page titles. Negligible CPU and memory.",
     q4: "Does it work in Firefox?", a4: "Currently Chromium browsers only (Chrome, Edge, Brave, Arc, Opera). Firefox support is on the roadmap.",
     footer: "Aura is not affiliated with Discord. Crafted with ♥ for the open web.",
@@ -51,7 +51,7 @@ const T: Record<Lang, Record<string, string>> = {
     badge: "Rich Presence do Discord · para a web",
     h1a: "A tua aura,", h1b: "em qualquer lado da web.",
     sub: "Uma pequena extensão para Chrome que atualiza o teu perfil do Discord com o que estás a ver, ouvir ou fazer na web.",
-    download: "Descarregar Aura", how: "Como funciona",
+    download: "Descarregar Aura", how: "Como funciona", tag_short: "Rich Presence do Discord — para a web aberta.",
     free: "Grátis · Navegadores Chromium · Sem conta necessária",
     feat_h: "Pensado para teres o controlo.",
     f1t: "Deteção automática", f1d: "Reconhece a tua atividade em mais de 27 sites em tempo real.",
@@ -67,12 +67,12 @@ const T: Record<Lang, Record<string, string>> = {
     setup_h: "Configura em menos de 2 minutos.",
     s1t: "Descarregar e descompactar", s1d: "Clica em Descarregar Aura e descompacta o ficheiro.",
     s2t: "Carregar no Chrome", s2d_pre: "Abre ", s2d_post: ", ativa o Modo de programador, clica em Carregar descompactado e escolhe a pasta.",
-    s3t: "Criar um bot do Discord", s3d: "Vai ao Developer Portal, cria uma app, copia o Bot Token e o Application ID.",
-    s4t: "Conectar", s4d: "Abre o popup do Aura → Conta → cola os dois valores → Guardar e Conectar.",
-    s5t: "Estás online", s5d: "Visita um site suportado. O teu estado do Discord atualiza-se sozinho.",
+    s3t: "Obter o teu token do Discord", s3d: "Abre o Discord no browser → DevTools → Network → copia o cabeçalho Authorization de qualquer pedido.",
+    s4t: "Conectar", s4d: "Abre o popup do Aura → Conta → cola o token → Entrar e Conectar.",
+    s5t: "Estás online", s5d: "Visita um site suportado. O teu perfil do Discord atualiza-se sozinho.",
     faq_h: "Perguntas frequentes.",
-    q1: "É seguro inserir o token do bot?", a1: "O teu token nunca sai do navegador. Fica guardado localmente e liga-se diretamente ao gateway do Discord.",
-    q2: "Porquê um bot e não a minha conta?", a2: "Self-bots violam os Termos de Serviço do Discord. Bots são a forma oficial e segura de definir presença personalizada.",
+    q1: "É seguro inserir o token?", a1: "O teu token nunca sai do navegador. Fica guardado localmente e liga-se diretamente ao gateway do Discord.",
+    q2: "A minha conta pode ser banida?", a2: "O Aura comporta-se como o cliente oficial e só atualiza a tua presença — mas usar tokens de utilizador é por tua conta e risco segundo os TOS do Discord.",
     q3: "Vai abrandar o meu navegador?", a3: "O Aura usa um pequeno WebSocket em background e lê títulos de página. CPU e memória negligenciáveis.",
     q4: "Funciona no Firefox?", a4: "Por enquanto só em navegadores Chromium (Chrome, Edge, Brave, Arc, Opera). Firefox está no plano.",
     footer: "Aura não tem ligação ao Discord. Feito com ♥ para a web aberta.",
@@ -82,7 +82,7 @@ const T: Record<Lang, Record<string, string>> = {
     badge: "Rich Presence de Discord · para la web",
     h1a: "Tu aura,", h1b: "donde sea que navegues.",
     sub: "Una pequeña extensión de Chrome que actualiza tu perfil de Discord con lo que estás viendo, escuchando o haciendo en la web.",
-    download: "Descargar Aura", how: "Cómo funciona",
+    download: "Descargar Aura", how: "Cómo funciona", tag_short: "Rich Presence de Discord — para la web abierta.",
     free: "Gratis · Navegadores Chromium · Sin cuenta",
     feat_h: "Hecho para tener el control.",
     f1t: "Detección automática", f1d: "Reconoce tu actividad en más de 27 sitios en tiempo real.",
@@ -98,12 +98,12 @@ const T: Record<Lang, Record<string, string>> = {
     setup_h: "Configura en menos de 2 minutos.",
     s1t: "Descarga y descomprime", s1d: "Pulsa Descargar Aura y descomprime el archivo.",
     s2t: "Cárgalo en Chrome", s2d_pre: "Abre ", s2d_post: ", activa Modo desarrollador, pulsa Cargar descomprimida y elige la carpeta.",
-    s3t: "Crea un bot de Discord", s3d: "Ve al Developer Portal, crea una app, copia el Bot Token y el Application ID.",
-    s4t: "Conecta", s4d: "Abre el popup de Aura → Cuenta → pega ambos → Guardar y Conectar.",
-    s5t: "¡Listo!", s5d: "Visita un sitio compatible. Tu estado de Discord se actualiza solo.",
+    s3t: "Obtén tu token de Discord", s3d: "Abre Discord en el navegador → DevTools → Network → copia el header Authorization de cualquier petición.",
+    s4t: "Conecta", s4d: "Abre el popup de Aura → Cuenta → pega tu token → Iniciar sesión.",
+    s5t: "¡Listo!", s5d: "Visita un sitio compatible. Tu perfil de Discord se actualiza solo.",
     faq_h: "Preguntas frecuentes.",
-    q1: "¿Es seguro introducir el token del bot?", a1: "Tu token nunca sale del navegador. Se guarda localmente y se conecta directo al gateway de Discord.",
-    q2: "¿Por qué un bot y no mi cuenta?", a2: "Los self-bots violan los Términos de Servicio de Discord. Los bots son la forma oficial y segura.",
+    q1: "¿Es seguro introducir el token?", a1: "Tu token nunca sale del navegador. Se guarda localmente y se conecta directo al gateway de Discord.",
+    q2: "¿Pueden banear mi cuenta?", a2: "Aura se comporta como el cliente oficial y solo actualiza tu presencia — pero usar tokens de usuario es bajo tu responsabilidad según los TOS de Discord.",
     q3: "¿Ralentiza el navegador?", a3: "Aura usa un pequeño WebSocket en segundo plano y lee títulos de página. CPU y memoria mínimos.",
     q4: "¿Funciona en Firefox?", a4: "Por ahora solo en navegadores Chromium (Chrome, Edge, Brave, Arc, Opera). Firefox en el roadmap.",
     footer: "Aura no está afiliado a Discord. Hecho con ♥ para la web abierta.",
@@ -121,6 +121,30 @@ function download() {
   fetch("/aura.zip").then(r => { if (!r.ok) throw new Error("Download failed"); return r.blob(); })
     .then(blob => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "aura.zip"; a.click(); URL.revokeObjectURL(a.href); })
     .catch(e => alert(e.message));
+}
+
+function RotatingFeatures({ items }: { items: [string, string][] }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI(v => (v + 1) % items.length), 3200);
+    return () => clearInterval(id);
+  }, [items.length]);
+  const a = items[i];
+  const b = items[(i + 1) % items.length];
+  return (
+    <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto min-h-[140px]">
+      {[a, b].map(([title, desc], k) => (
+        <div
+          key={`${i}-${k}`}
+          className="rounded-xl border border-border bg-card/50 backdrop-blur p-6 animate-[fadeSlide_.5s_ease-out]"
+        >
+          <div className="font-semibold mb-2">{title}</div>
+          <div className="text-sm text-muted-foreground leading-relaxed">{desc}</div>
+        </div>
+      ))}
+      <style>{`@keyframes fadeSlide { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: none; } }`}</style>
+    </div>
+  );
 }
 
 function Index() {
@@ -181,19 +205,12 @@ function Index() {
               {x.how}
             </a>
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">{x.free}</p>
+          <p className="mt-4 text-xs text-muted-foreground">{x.tag_short}</p>
         </section>
 
         <section id="features" className="mt-32">
           <h2 className="text-3xl font-bold mb-10 text-center">{x.feat_h}</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {features.map(([tk, dk]) => (
-              <div key={tk} className="rounded-xl border border-border bg-card/50 backdrop-blur p-5 hover:border-primary/40 transition">
-                <div className="font-semibold mb-1.5">{x[tk]}</div>
-                <div className="text-sm text-muted-foreground leading-relaxed">{x[dk]}</div>
-              </div>
-            ))}
-          </div>
+          <RotatingFeatures items={features.map(([tk, dk]) => [x[tk], x[dk]] as [string, string])} />
         </section>
 
         <section id="platforms" className="mt-32">
