@@ -111,3 +111,69 @@ button.ghost:hover { color: var(--text); }
 .stats strong { color: var(--text); margin-left: 8px; font-size: 14px; }
 .row { display:flex; gap:6px; margin: 8px 0; }
 .row button { flex: 1; }
+
+/* bot card */
+.bot-card { display:flex; align-items:center; gap:10px; padding:10px; background:var(--bg-2); border:1px solid var(--border); border-radius:8px; margin-bottom:10px; animation: slideDown .3s ease; }
+.bot-card img { width:36px; height:36px; border-radius:50%; }
+.bot-card strong { font-size:13px; }
+.bot-card .pill { margin-left:auto; }
+.hidden { display: none !important; }
+
+/* now thumb */
+.now-head { display:flex; gap:10px; align-items:flex-start; }
+.thumb { width:56px; height:56px; border-radius:8px; object-fit:cover; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,.3); }
+.now-text { flex:1; min-width:0; }
+.now-text > div { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* login status */
+.login-status { margin-top:8px; padding:8px 10px; border-radius:6px; font-size:12px; animation: fadeIn .25s; }
+.login-status.ok { background:rgba(59,165,93,.12); color:var(--green); border:1px solid rgba(59,165,93,.3); }
+.login-status.err { background:rgba(237,66,69,.12); color:var(--red); border:1px solid rgba(237,66,69,.3); }
+.login-status.info { background:rgba(88,101,242,.12); color:var(--brand); }
+
+/* logs */
+.log-list { max-height:300px; overflow:auto; display:flex; flex-direction:column; gap:4px; }
+.log { display:flex; gap:8px; padding:6px 8px; background:var(--bg-2); border-radius:4px; font-size:11px; border-left:3px solid var(--brand); animation: fadeIn .2s; }
+.log-time { color:var(--muted); flex-shrink:0; font-variant-numeric:tabular-nums; }
+.log-msg { color:var(--text); word-break:break-word; }
+.log-error { border-left-color:var(--red); }
+.log-warn { border-left-color:var(--yellow); }
+.log-info { border-left-color:var(--green); }
+
+/* animations */
+@keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+@keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
+@keyframes floatIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+@keyframes pulseRing { 0% { box-shadow:0 0 0 0 rgba(88,101,242,.6); } 70% { box-shadow:0 0 0 18px rgba(88,101,242,0); } 100% { box-shadow:0 0 0 0 rgba(88,101,242,0); } }
+
+.welcome .brandrow { animation: floatIn .6s ease both; }
+.welcome .brandrow img { animation: pulseRing 2.4s ease-out infinite; }
+.welcome > p { animation: floatIn .7s .1s ease both; }
+.welcome .card { animation: floatIn .7s ease both; }
+.welcome .card:nth-of-type(1) { animation-delay: .2s; }
+.welcome .card:nth-of-type(2) { animation-delay: .35s; }
+.welcome .card:nth-of-type(3) { animation-delay: .5s; }
+.welcome .cta { animation: floatIn .6s .65s ease both; }
+.welcome ol li, .welcome ul li { animation: floatIn .4s ease both; }
+.welcome ol li:nth-child(1), .welcome ul li:nth-child(1) { animation-delay: .3s; }
+.welcome ol li:nth-child(2), .welcome ul li:nth-child(2) { animation-delay: .35s; }
+.welcome ol li:nth-child(3), .welcome ul li:nth-child(3) { animation-delay: .4s; }
+.welcome ol li:nth-child(4), .welcome ul li:nth-child(4) { animation-delay: .45s; }
+.welcome ol li:nth-child(5), .welcome ul li:nth-child(5) { animation-delay: .5s; }
+.welcome ol li:nth-child(6), .welcome ul li:nth-child(6) { animation-delay: .55s; }
+.welcome ol li:nth-child(7), .welcome ul li:nth-child(7) { animation-delay: .6s; }
+
+.welcome-bg { position:fixed; inset:0; z-index:-1; background:
+  radial-gradient(circle at 20% 20%, rgba(88,101,242,.15), transparent 50%),
+  radial-gradient(circle at 80% 60%, rgba(139,92,246,.12), transparent 55%),
+  var(--bg);
+}
+
+.feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin-top:14px; }
+.feature-grid .feat { background:var(--bg-3); padding:14px; border-radius:10px; border:1px solid var(--border); transition:transform .2s, border-color .2s; }
+.feature-grid .feat:hover { transform:translateY(-3px); border-color:var(--brand); }
+.feature-grid .feat strong { display:block; color:var(--text); font-size:13px; margin-bottom:4px; }
+.feature-grid .feat span { font-size:12px; color:var(--muted); }
+
+.cta { transition:.2s; }
+.cta:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(88,101,242,.4); }
