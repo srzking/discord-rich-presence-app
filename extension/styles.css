@@ -103,3 +103,11 @@ button.ghost:hover { color: var(--text); }
 .cta { display: inline-block; background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #fff !important; padding: 11px 22px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 14px; }
 .brandrow { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .brandrow img { width: 56px; height: 56px; border-radius: 14px; }
+
+.header-right { display: flex; align-items: center; gap: 8px; }
+.lang-sel { font-size: 11px; padding: 4px 6px; }
+.search { margin-bottom: 8px; }
+.stats { display:flex; justify-content:space-between; padding: 8px 12px; background: var(--bg-2); border:1px solid var(--border); border-radius:6px; margin-bottom:10px; font-size:12px; }
+.stats strong { color: var(--text); margin-left: 8px; font-size: 14px; }
+.row { display:flex; gap:6px; margin: 8px 0; }
+.row button { flex: 1; }
