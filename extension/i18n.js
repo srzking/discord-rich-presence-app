@@ -28,6 +28,8 @@ const I18N = {
     logs: "Logs", refresh: "Refresh", clearLogs: "Clear", noLogs: "No logs yet.",
     loginConnect: "Login & Connect", loggingIn: "Logging in…", validating: "Validating token…",
     loginFailed: "Login failed — check token", loggedAs: "Logged in as",
+    userToken: "Discord Token", userTokenHint: "Your token logs you in as your own account so the activity appears on your profile.",
+    manageSettings: "Manage settings", resetAll: "Reset everything", resetConfirm: "Reset all settings and disconnect?",
   },
   pt: {
     enable: "Ativar / desativar",
@@ -57,6 +59,8 @@ const I18N = {
     logs: "Registos", refresh: "Atualizar", clearLogs: "Limpar", noLogs: "Sem registos.",
     loginConnect: "Entrar e Conectar", loggingIn: "A entrar…", validating: "A validar token…",
     loginFailed: "Falha no login — verifica o token", loggedAs: "Ligado como",
+    userToken: "Token do Discord", userTokenHint: "O teu token entra na tua conta para a atividade aparecer no teu perfil.",
+    manageSettings: "Gerir definições", resetAll: "Repor tudo", resetConfirm: "Repor todas as definições e desligar?",
   },
   es: {
     enable: "Activar / desactivar",
@@ -86,6 +90,8 @@ const I18N = {
     logs: "Registros", refresh: "Actualizar", clearLogs: "Limpiar", noLogs: "Sin registros.",
     loginConnect: "Iniciar sesión", loggingIn: "Iniciando…", validating: "Validando token…",
     loginFailed: "Error de inicio — revisa el token", loggedAs: "Conectado como",
+    userToken: "Token de Discord", userTokenHint: "Tu token inicia sesión en tu cuenta para que la actividad aparezca en tu perfil.",
+    manageSettings: "Gestionar ajustes", resetAll: "Restablecer todo", resetConfirm: "¿Restablecer todos los ajustes y desconectar?",
   }
 };
 function t(lang, key) { return (I18N[lang] || I18N.en)[key] || I18N.en[key] || key; }
