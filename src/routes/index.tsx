@@ -181,19 +181,12 @@ function Index() {
               {x.how}
             </a>
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">{x.free}</p>
+          <p className="mt-4 text-xs text-muted-foreground">{x.tag_short}</p>
         </section>
 
         <section id="features" className="mt-32">
           <h2 className="text-3xl font-bold mb-10 text-center">{x.feat_h}</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {features.map(([tk, dk]) => (
-              <div key={tk} className="rounded-xl border border-border bg-card/50 backdrop-blur p-5 hover:border-primary/40 transition">
-                <div className="font-semibold mb-1.5">{x[tk]}</div>
-                <div className="text-sm text-muted-foreground leading-relaxed">{x[dk]}</div>
-              </div>
-            ))}
-          </div>
+          <RotatingFeatures items={features.map(([tk, dk]) => [x[tk], x[dk]] as [string, string])} />
         </section>
 
         <section id="platforms" className="mt-32">
