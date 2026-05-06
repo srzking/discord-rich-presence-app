@@ -7,51 +7,87 @@
 <body class="popup">
   <header>
     <div class="logo">
-      <span class="dot"></span>
-      <strong>WebPresence</strong>
+      <img src="icons/icon128.png" alt="" />
+      <strong>Aura</strong>
     </div>
-    <span id="status" class="pill off">offline</span>
+    <label class="switch" title="Enable / disable">
+      <input type="checkbox" id="enabled" />
+      <span class="slider"></span>
+    </label>
   </header>
 
-  <section class="now">
-    <div class="muted">Now showing</div>
-    <div id="actName">—</div>
-    <div id="actDetails" class="sub"></div>
-    <div id="actState" class="sub"></div>
+  <div class="tabs">
+    <button data-tab="now" class="active">Now</button>
+    <button data-tab="account">Account</button>
+    <button data-tab="custom">Custom</button>
+    <button data-tab="apps">Apps</button>
+    <button data-tab="settings">Settings</button>
+  </div>
+
+  <!-- NOW -->
+  <section data-pane="now" class="pane active">
+    <div class="status-row">
+      <span id="statusPill" class="pill off">offline</span>
+      <select id="statusSel" class="mini">
+        <option value="online">🟢 Online</option>
+        <option value="idle">🌙 Idle</option>
+        <option value="dnd">⛔ Do Not Disturb</option>
+        <option value="invisible">⚫ Invisible</option>
+      </select>
+    </div>
+    <div class="now-card">
+      <div class="muted">Now showing</div>
+      <div id="actName">—</div>
+      <div id="actDetails" class="sub"></div>
+      <div id="actState" class="sub"></div>
+    </div>
+    <button id="clear" class="ghost full">Clear presence</button>
   </section>
 
-  <section class="form">
+  <!-- ACCOUNT -->
+  <section data-pane="account" class="pane">
     <label>Bot Token</label>
-    <input id="token" type="password" placeholder="MTk4Njg..." />
-
-    <label>Application ID <span class="muted">(optional, for images)</span></label>
+    <input id="token" type="password" placeholder="MTk4..." />
+    <label>Application ID <span class="muted">(for images)</span></label>
     <input id="appId" type="text" placeholder="123456789012345678" />
+    <button id="save" class="primary full">Save & Connect</button>
+    <p class="hint">Need help? <a href="welcome.html" target="_blank">Read the setup guide →</a></p>
+  </section>
 
-    <label>Status</label>
-    <select id="statusSel">
-      <option value="online">Online</option>
-      <option value="idle">Idle</option>
-      <option value="dnd">Do Not Disturb</option>
-      <option value="invisible">Invisible</option>
+  <!-- CUSTOM -->
+  <section data-pane="custom" class="pane">
+    <label>Custom activity (overrides everything)</label>
+    <input id="customText" type="text" placeholder="e.g. Building cool stuff" />
+    <label>Activity type</label>
+    <select id="customType">
+      <option value="0">Playing</option>
+      <option value="2">Listening to</option>
+      <option value="3">Watching</option>
+      <option value="5">Competing in</option>
     </select>
-
-    <div class="row">
-      <button id="save" class="primary">Save & Connect</button>
-      <button id="clear" class="ghost">Clear</button>
-    </div>
+    <button id="saveCustom" class="primary full">Apply</button>
+    <button id="clearCustom" class="ghost full">Remove override</button>
   </section>
 
-  <section class="platforms">
-    <div class="muted">Supported platforms</div>
-    <div class="chips">
-      <span>YouTube</span><span>Netflix</span><span>Spotify</span><span>Twitch</span>
-      <span>GitHub</span><span>X</span><span>Reddit</span><span>SoundCloud</span>
-      <span>Prime Video</span><span>Disney+</span><span>Max</span><span>Crunchyroll</span>
-      <span>Stack Overflow</span><span>Wikipedia</span><span>VS Code Web</span>
-    </div>
+  <!-- APPS -->
+  <section data-pane="apps" class="pane">
+    <p class="muted small">Toggle which sites are tracked.</p>
+    <div id="platformList" class="platform-list"></div>
   </section>
 
-  <footer><a href="welcome.html" target="_blank">Setup guide</a></footer>
+  <!-- SETTINGS -->
+  <section data-pane="settings" class="pane">
+    <label class="check">
+      <input id="idleAway" type="checkbox" />
+      <span>Set status to idle when AFK</span>
+    </label>
+    <label class="check">
+      <input id="skipIncognito" type="checkbox" />
+      <span>Don't track incognito tabs</span>
+    </label>
+    <button id="disconnectBtn" class="ghost full">Disconnect bot</button>
+  </section>
+
   <script src="popup.js"></script>
 </body>
 </html>

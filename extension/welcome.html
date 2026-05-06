@@ -2,37 +2,48 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Welcome to WebPresence</title>
+<title>Welcome to Aura</title>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <div class="welcome">
-  <h1>👋 Welcome to WebPresence</h1>
-  <p>Show what you're watching, listening to or browsing on your Discord profile — automatically. Works with YouTube, Netflix, Spotify, Twitch and many more.</p>
+  <div class="brandrow">
+    <img src="icons/icon128.png" alt="Aura" />
+    <div>
+      <h1 style="margin:0">Aura</h1>
+      <p style="margin:0">Rich Presence for the web.</p>
+    </div>
+  </div>
+
+  <p>Aura shows what you're watching, listening to, or browsing on your Discord profile — automatically. Works across YouTube, Netflix, Spotify, Twitch and more, with no installs or terminals required.</p>
 
   <div class="card">
-    <h2>Quick setup</h2>
+    <h2>Setup in 2 minutes</h2>
     <ol>
-      <li>Go to the <a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a> and create a new <strong>Application</strong>.</li>
-      <li>Open the <strong>Bot</strong> tab and click <em>Reset Token</em> to copy your bot token.</li>
-      <li>Copy your <strong>Application ID</strong> from the General Information page (optional, only needed if you want images).</li>
-      <li>Invite the bot to a server you're in (it just needs to be online — no permissions required).</li>
-      <li>Open the WebPresence popup, paste both values, click <strong>Save & Connect</strong>.</li>
-      <li>Open YouTube, Spotify or any supported site — your Discord status will update.</li>
+      <li>Open the <a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a> and create a new <strong>Application</strong>.</li>
+      <li>Go to the <strong>Bot</strong> tab → <em>Reset Token</em> → copy the token.</li>
+      <li>Copy the <strong>Application ID</strong> from <em>General Information</em> (optional, only for images).</li>
+      <li>Invite the bot to any server you're in (no permissions needed).</li>
+      <li>Click the Aura icon in your toolbar, open the <strong>Account</strong> tab and paste both values.</li>
+      <li>Browse a supported site — your status updates automatically.</li>
     </ol>
-    <p class="sub">Note: bots show their own presence, so the status appears on the bot account. To show images, upload them as Rich Presence assets in your application using the platform id (e.g. <code>youtube</code>, <code>netflix</code>, <code>spotify</code>).</p>
+    <p>To show platform thumbnails, upload images named <code>youtube</code>, <code>netflix</code>, <code>spotify</code>, etc. as Rich Presence assets in your application.</p>
   </div>
 
   <div class="card">
-    <h2>Supported platforms</h2>
-    <p>YouTube · Netflix · Spotify · Twitch · GitHub · X (Twitter) · Reddit · SoundCloud · Prime Video · Disney+ · Max · Crunchyroll · Stack Overflow · Wikipedia · VS Code Web</p>
+    <h2>What Aura can do</h2>
+    <ul>
+      <li>Auto-detect activity on 15+ websites</li>
+      <li>Custom activity override (Playing / Watching / Listening / Competing)</li>
+      <li>Per-site toggles — turn off platforms you don't want shared</li>
+      <li>Auto-idle when you're AFK</li>
+      <li>Skip incognito tabs for privacy</li>
+      <li>One-click on/off switch</li>
+      <li>Online · Idle · DND · Invisible status control</li>
+    </ul>
   </div>
 
-  <a class="cta" href="#" onclick="window.close()">Got it, let's go</a>
+  <a class="cta" href="#" onclick="window.close()">Got it — let's go</a>
 </div>
-<script>
-  // Mark welcome as seen
-  if (chrome?.storage) chrome.storage.local.set({ welcomeSeen: true });
-</script>
 </body>
 </html>
