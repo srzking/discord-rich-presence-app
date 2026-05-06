@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="popup">
+  <header>
+    <div class="logo">
+      <span class="dot"></span>
+      <strong>WebPresence</strong>
+    </div>
+    <span id="status" class="pill off">offline</span>
+  </header>
+
+  <section class="now">
+    <div class="muted">Now showing</div>
+    <div id="actName">—</div>
+    <div id="actDetails" class="sub"></div>
+    <div id="actState" class="sub"></div>
+  </section>
+
+  <section class="form">
+    <label>Bot Token</label>
+    <input id="token" type="password" placeholder="MTk4Njg..." />
+
+    <label>Application ID <span class="muted">(optional, for images)</span></label>
+    <input id="appId" type="text" placeholder="123456789012345678" />
+
+    <label>Status</label>
+    <select id="statusSel">
+      <option value="online">Online</option>
+      <option value="idle">Idle</option>
+      <option value="dnd">Do Not Disturb</option>
+      <option value="invisible">Invisible</option>
+    </select>
+
+    <div class="row">
+      <button id="save" class="primary">Save & Connect</button>
+      <button id="clear" class="ghost">Clear</button>
+    </div>
+  </section>
+
+  <section class="platforms">
+    <div class="muted">Supported platforms</div>
+    <div class="chips">
+      <span>YouTube</span><span>Netflix</span><span>Spotify</span><span>Twitch</span>
+      <span>GitHub</span><span>X</span><span>Reddit</span><span>SoundCloud</span>
+      <span>Prime Video</span><span>Disney+</span><span>Max</span><span>Crunchyroll</span>
+      <span>Stack Overflow</span><span>Wikipedia</span><span>VS Code Web</span>
+    </div>
+  </section>
+
+  <footer><a href="welcome.html" target="_blank">Setup guide</a></footer>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Welcome to WebPresence</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="welcome">
+  <h1>👋 Welcome to WebPresence</h1>
+  <p>Show what you're watching, listening to or browsing on your Discord profile — automatically. Works with YouTube, Netflix, Spotify, Twitch and many more.</p>
+
+  <div class="card">
+    <h2>Quick setup</h2>
+    <ol>
+      <li>Go to the <a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a> and create a new <strong>Application</strong>.</li>
+      <li>Open the <strong>Bot</strong> tab and click <em>Reset Token</em> to copy your bot token.</li>
+      <li>Copy your <strong>Application ID</strong> from the General Information page (optional, only needed if you want images).</li>
+      <li>Invite the bot to a server you're in (it just needs to be online — no permissions required).</li>
+      <li>Open the WebPresence popup, paste both values, click <strong>Save & Connect</strong>.</li>
+      <li>Open YouTube, Spotify or any supported site — your Discord status will update.</li>
+    </ol>
+    <p class="sub">Note: bots show their own presence, so the status appears on the bot account. To show images, upload them as Rich Presence assets in your application using the platform id (e.g. <code>youtube</code>, <code>netflix</code>, <code>spotify</code>).</p>
+  </div>
+
+  <div class="card">
+    <h2>Supported platforms</h2>
+    <p>YouTube · Netflix · Spotify · Twitch · GitHub · X (Twitter) · Reddit · SoundCloud · Prime Video · Disney+ · Max · Crunchyroll · Stack Overflow · Wikipedia · VS Code Web</p>
+  </div>
+
+  <a class="cta" href="#" onclick="window.close()">Got it, let's go</a>
+</div>
+<script>
+  // Mark welcome as seen
+  if (chrome?.storage) chrome.storage.local.set({ welcomeSeen: true });
+</script>
+</body>
+</html>
