@@ -66,6 +66,7 @@ async function load() {
 
   applyLang();
   refreshStatus();
+  checkUpdate();
 }
 
 function renderBot(botUser, connected) {
