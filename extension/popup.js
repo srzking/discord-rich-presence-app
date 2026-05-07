@@ -59,6 +59,9 @@ async function load() {
   $("#idleAway").checked = cfg.idleAway !== false;
   $("#skipIncognito").checked = cfg.skipIncognito !== false;
   $("#enabled").checked = cfg.enabled !== false;
+  if ($("#showButtons")) $("#showButtons").checked = cfg.showButtons !== false;
+  if ($("#showThumbnails")) $("#showThumbnails").checked = cfg.showThumbnails !== false;
+  if ($("#notifyOnConnect")) $("#notifyOnConnect").checked = cfg.notifyOnConnect !== false;
   cachedDisabled = new Set(cfg.disabledPlatforms || []);
 
   applyLang();
@@ -81,7 +84,7 @@ function refreshStatus() {
   chrome.runtime.sendMessage({ type: "status:get" }, async (res) => {
     if (chrome.runtime.lastError || !res) return;
     const pill = $("#statusPill");
-    pill.textContent = t(lang, res.connected ? "connected" : "offline");
+    pill.textContent = __aura_t(lang, res.connected ? "connected" : "offline");
     pill.className = "pill " + (res.connected ? "on" : "off");
     renderBot(res.botUser, res.connected);
     const a = res.activity;
@@ -94,6 +97,23 @@ function refreshStatus() {
     const { trackedToday = {} } = await chrome.storage.local.get("trackedToday");
     const today = new Date().toISOString().slice(0,10);
     $("#todayMin").textContent = Math.round((trackedToday[today] || 0) / 60);
+    // Top apps
+    const top = $("#topApps");
+    if (top) {
+      const entries = Object.entries(res.trackedByApp || {})
+        .filter(([k]) => k.startsWith(today + ":"))
+        .map(([k,v]) => [k.split(":")[1], v])
+        .sort((a,b) => b[1]-a[1]).slice(0,5);
+      if (!entries.length) top.innerHTML = `<div class="muted small" style="padding:6px">${__aura_t(lang,"noApps")}</div>`;
+      else {
+        const max = entries[0][1];
+        top.innerHTML = entries.map(([id,sec]) => {
+          const name = (PLATFORMS.find(p=>p[0]===id)||[id,id])[1];
+          const pct = Math.max(8, Math.round(sec/max*100));
+          return `<div class="ta-row"><span>${name}</span><span class="ta-bar"><span style="width:${pct}%"></span></span><span class="muted small">${Math.round(sec/60)}m</span></div>`;
+        }).join("");
+      }
+    }
   });
 }
 
@@ -150,6 +170,9 @@ $("#statusSel").addEventListener("change", () => send({ status: $("#statusSel").
 $("#enabled").addEventListener("change", () => send({ enabled: $("#enabled").checked }, true));
 $("#idleAway").addEventListener("change", () => send({ idleAway: $("#idleAway").checked }));
 $("#skipIncognito").addEventListener("change", () => send({ skipIncognito: $("#skipIncognito").checked }));
+$("#showButtons")?.addEventListener("change", () => send({ showButtons: $("#showButtons").checked }));
+$("#showThumbnails")?.addEventListener("change", () => send({ showThumbnails: $("#showThumbnails").checked }));
+$("#notifyOnConnect")?.addEventListener("change", () => send({ notifyOnConnect: $("#notifyOnConnect").checked }));
 
 $("#saveCustom").addEventListener("click", () =>
   send({ customText: $("#customText").value.trim(), customType: $("#customType").value }));

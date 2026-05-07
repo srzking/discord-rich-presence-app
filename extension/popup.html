@@ -65,6 +65,8 @@
     <div class="stats">
       <div><span class="muted small" data-i18n="todayTracked">Tracked today</span><strong id="todayMin">0</strong> <span data-i18n="minutes">min</span></div>
     </div>
+    <div class="muted small" style="margin-top:10px" data-i18n="topApps">Top apps today</div>
+    <div id="topApps" class="top-apps"></div>
     <button id="clear" class="ghost full" data-i18n="clearPresence">Clear presence</button>
   </section>
 
@@ -115,6 +117,18 @@
     <label class="check">
       <input id="skipIncognito" type="checkbox" />
       <span data-i18n="skipIncog">Don't track incognito tabs</span>
+    </label>
+    <label class="check">
+      <input id="showButtons" type="checkbox" />
+      <span data-i18n="showButtons">Show 'Open' button on activity</span>
+    </label>
+    <label class="check">
+      <input id="showThumbnails" type="checkbox" />
+      <span data-i18n="showThumbnails">Use page image as activity thumbnail</span>
+    </label>
+    <label class="check">
+      <input id="notifyOnConnect" type="checkbox" />
+      <span data-i18n="notifyConnect">Notify when connected</span>
     </label>
     <h3 class="muted small" style="margin-top:14px" data-i18n="manageSettings">Manage settings</h3>
     <div class="row">

@@ -87,11 +87,13 @@
   }
 
   send();
-  setInterval(send, 8000);
+  setTimeout(send, 1500); // recheck once page hydrates
+  setInterval(send, 4000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) { last = ""; send(); } });
+  window.addEventListener("focus", () => { last = ""; send(); });
 
   let lastUrl = location.href;
   new MutationObserver(() => {
-    if (location.href !== lastUrl) { lastUrl = location.href; setTimeout(send, 600); }
+    if (location.href !== lastUrl) { lastUrl = location.href; last = ""; setTimeout(send, 400); }
   }).observe(document, { subtree: true, childList: true });
 })();

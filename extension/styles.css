@@ -177,3 +177,9 @@ button.ghost:hover { color: var(--text); }
 
 .cta { transition:.2s; }
 .cta:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(88,101,242,.4); }
+
+/* top apps */
+.top-apps { display:flex; flex-direction:column; gap:4px; margin: 6px 0 10px; }
+.ta-row { display:grid; grid-template-columns: 90px 1fr 36px; gap:8px; align-items:center; font-size:12px; padding: 4px 8px; background:var(--bg-2); border-radius:4px; }
+.ta-bar { height:6px; background:var(--bg-4); border-radius:3px; overflow:hidden; }
+.ta-bar > span { display:block; height:100%; background: linear-gradient(90deg, var(--brand), #8B5CF6); border-radius:3px; transition:width .3s; }

@@ -1,4 +1,4 @@
-// Aura background service worker
+// Aura background service worker — v1.2
 const GATEWAY_URL = "wss://gateway.discord.gg/?v=10&encoding=json";
 const API = "https://discord.com/api/v10";
 
@@ -11,70 +11,102 @@ let identified = false;
 let lastActivity = null;
 let connecting = false;
 let userIdle = false;
+let pushTimer = null;
 
 async function getCfg() {
   return await chrome.storage.local.get([
     "token", "appId", "status", "customText", "customType",
-    "disabledPlatforms", "idleAway", "skipIncognito", "enabled", "botUser"
+    "disabledPlatforms", "idleAway", "skipIncognito", "enabled", "botUser",
+    "isBotToken", "showButtons", "showThumbnails", "notifyOnConnect"
   ]);
 }
 
 function setBadge(text, color = "#5865F2") {
-  chrome.action.setBadgeBackgroundColor({ color });
-  chrome.action.setBadgeText({ text });
+  try { chrome.action.setBadgeBackgroundColor({ color }); chrome.action.setBadgeText({ text }); } catch {}
 }
 
 async function log(level, message, meta) {
   const { logs = [] } = await chrome.storage.local.get("logs");
   logs.unshift({ t: Date.now(), level, message, meta });
-  if (logs.length > 100) logs.length = 100;
+  if (logs.length > 150) logs.length = 150;
   await chrome.storage.local.set({ logs });
   chrome.runtime.sendMessage({ type: "log:new" }).catch(() => {});
 }
 
 async function validateToken(token) {
-  // Try as user token first (no prefix), then as bot token
   for (const auth of [token, `Bot ${token}`]) {
     try {
       const r = await fetch(`${API}/users/@me`, { headers: { Authorization: auth } });
       if (r.ok) {
         const user = await r.json();
-        return { ok: true, user, isBot: auth.startsWith("Bot ") };
+        return { ok: true, user, isBot: auth.startsWith("Bot "), authHeader: auth };
       }
     } catch {}
   }
   return { ok: false, error: "Invalid token" };
 }
 
+// ------- External assets (for image URLs to show in activity) -------
+// Discord accepts external image URLs only after registering them via
+// /applications/{app_id}/external-assets — returns an "mp:external/..." id.
+const assetCache = new Map(); // url -> mp:external/...
+async function registerExternalAsset(appId, url) {
+  if (!appId || !url) return null;
+  const key = `${appId}:${url}`;
+  if (assetCache.has(key)) return assetCache.get(key);
+  try {
+    const { token, isBotToken } = await chrome.storage.local.get(["token", "isBotToken"]);
+    const auth = isBotToken ? `Bot ${token}` : token;
+    const r = await fetch(`${API}/applications/${appId}/external-assets`, {
+      method: "POST",
+      headers: { Authorization: auth, "Content-Type": "application/json" },
+      body: JSON.stringify({ urls: [url] })
+    });
+    if (!r.ok) { assetCache.set(key, null); return null; }
+    const arr = await r.json();
+    const id = arr?.[0]?.external_asset_path;
+    const final = id ? `mp:${id}` : null;
+    assetCache.set(key, final);
+    return final;
+  } catch { return null; }
+}
+
 async function loginAndConnect() {
   const cfg = await getCfg();
-  if (!cfg.token) { setBadge("!", "#ED4245"); await log("warn", "No bot token set"); return; }
+  if (!cfg.token) { setBadge("!", "#ED4245"); await log("warn", "No token set"); return; }
   if (cfg.enabled === false) { setBadge("off", "#747F8D"); return; }
 
   setBadge("…", "#FAA61A");
   const v = await validateToken(cfg.token);
   if (!v.ok) {
     setBadge("err", "#ED4245");
-    await log("error", "Login failed", { status: v.status });
-    await chrome.storage.local.set({ botUser: null, lastError: v.error || `HTTP ${v.status}` });
-    chrome.runtime.sendMessage({ type: "auth:failed", status: v.status }).catch(() => {});
+    await log("error", "Login failed");
+    await chrome.storage.local.set({ botUser: null, lastError: v.error });
+    chrome.runtime.sendMessage({ type: "auth:failed" }).catch(() => {});
     return;
   }
   await chrome.storage.local.set({
-    botUser: { id: v.user.id, username: v.user.username, avatar: v.user.avatar, discriminator: v.user.discriminator, isBot: v.isBot },
+    botUser: { id: v.user.id, username: v.user.username, avatar: v.user.avatar, isBot: v.isBot },
     isBotToken: v.isBot,
     lastError: null
   });
-  await log("info", `Logged in as ${v.user.username}${v.isBot ? " (bot)" : ""}`, { id: v.user.id });
+  await log("info", `Logged in as ${v.user.username}${v.isBot ? " (bot)" : ""}`);
   chrome.runtime.sendMessage({ type: "auth:ok", user: v.user }).catch(() => {});
+  if (cfg.notifyOnConnect !== false) {
+    try {
+      chrome.notifications?.create?.({
+        type: "basic", iconUrl: chrome.runtime.getURL("icons/icon128.png"),
+        title: "Aura connected", message: `Logged in as ${v.user.username}`
+      });
+    } catch {}
+  }
   await connect();
 }
 
 async function connect() {
   if (connecting) return;
   const cfg = await getCfg();
-  if (!cfg.token) return;
-  if (cfg.enabled === false) { setBadge("off", "#747F8D"); return; }
+  if (!cfg.token || cfg.enabled === false) { setBadge(cfg.enabled === false ? "off" : "!", "#747F8D"); return; }
   connecting = true;
   try {
     if (ws) try { ws.close(); } catch {}
@@ -86,14 +118,13 @@ async function connect() {
       if (heartbeatInterval) clearInterval(heartbeatInterval);
       setBadge("off", "#747F8D");
       log("warn", `Gateway closed (${e.code})`);
-      // 4004 = invalid token, don't loop
-      if (e.code === 4004) return;
-      setTimeout(() => { connecting = false; connect(); }, 5000);
+      if (e.code === 4004) { connecting = false; return; }
+      setTimeout(() => { connecting = false; connect(); }, 4000);
     };
     ws.onerror = () => {};
   } catch {
     connecting = false;
-    setTimeout(connect, 5000);
+    setTimeout(connect, 4000);
   }
 }
 
@@ -125,14 +156,14 @@ async function handle(payload) {
       if (t === "READY") {
         identified = true; sessionId = d.session_id; resumeUrl = d.resume_gateway_url;
         connecting = false; setBadge("on", "#3BA55D");
-        log("info", "Connected to Discord gateway");
+        log("info", "Connected to Discord");
       } else if (t === "RESUMED") {
         identified = true; connecting = false; setBadge("on", "#3BA55D");
       }
       break;
     case 9:
       sessionId = null; resumeUrl = null; identified = false;
-      setTimeout(connect, 3000);
+      setTimeout(connect, 2500);
       break;
     case 7:
       try { ws.close(); } catch {}
@@ -146,18 +177,18 @@ async function buildPresence(activity) {
 
   let act = activity;
   if (cfg.customText) {
-    act = {
-      id: "custom",
-      name: "Aura",
-      type: parseInt(cfg.customType ?? "0", 10),
-      details: cfg.customText
-    };
+    act = { id: "custom", name: "Aura", type: parseInt(cfg.customType ?? "0", 10), details: cfg.customText };
   }
   if (act && cfg.disabledPlatforms?.includes(act.id)) act = null;
   if (!act) return { since: 0, activities: [], status, afk: false };
 
-  // Auto thumbnail: prefer page-provided image (og:image)
-  const largeImage = act.thumbnail || (cfg.appId ? act.id : undefined);
+  // Resolve large image: register external URL with Discord proxy if appId set.
+  let largeImage;
+  if (cfg.showThumbnails !== false && act.thumbnail && cfg.appId) {
+    largeImage = await registerExternalAsset(cfg.appId, act.thumbnail);
+  }
+  if (!largeImage && cfg.appId) largeImage = act.id; // fallback to app asset key
+
   const a = {
     name: act.name,
     type: act.type ?? 0,
@@ -167,19 +198,23 @@ async function buildPresence(activity) {
     timestamps: act.startTimestamp ? { start: act.startTimestamp } : { start: Date.now() },
     assets: largeImage ? {
       large_image: largeImage,
-      large_text: act.name,
-      small_image: act.smallImage || undefined,
-      small_text: act.smallText || undefined
+      large_text: act.details || act.name,
+      small_image: act.id, // platform key as small image (if app has it)
+      small_text: act.name
     } : undefined,
-    buttons: act.url ? ["Open"] : undefined,
-    metadata: act.url ? { button_urls: [act.url] } : undefined
+    buttons: (cfg.showButtons !== false && act.url) ? ["Open in browser"] : undefined,
+    metadata: (cfg.showButtons !== false && act.url) ? { button_urls: [act.url] } : undefined
   };
   return { since: 0, activities: [a], status, afk: false };
 }
 
 async function pushPresence() {
   if (ws?.readyState !== 1 || !identified) return;
-  ws.send(JSON.stringify({ op: 3, d: await buildPresence(lastActivity) }));
+  // Debounce so rapid tab switches don't spam the gateway
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(async () => {
+    try { ws.send(JSON.stringify({ op: 3, d: await buildPresence(lastActivity) })); } catch {}
+  }, 350);
 }
 
 let lastTickAt = Date.now();
@@ -189,12 +224,13 @@ async function tickTracking() {
   lastTickAt = now;
   if (!lastActivity || userIdle) return;
   const today = new Date().toISOString().slice(0, 10);
-  const { trackedToday = {} } = await chrome.storage.local.get("trackedToday");
+  const { trackedToday = {}, trackedByApp = {} } = await chrome.storage.local.get(["trackedToday","trackedByApp"]);
   trackedToday[today] = (trackedToday[today] || 0) + delta;
-  for (const k of Object.keys(trackedToday)) if (k < today.slice(0,8) + "01") delete trackedToday[k];
-  await chrome.storage.local.set({ trackedToday });
+  const k = `${today}:${lastActivity.id}`;
+  trackedByApp[k] = (trackedByApp[k] || 0) + delta;
+  await chrome.storage.local.set({ trackedToday, trackedByApp });
 }
-setInterval(tickTracking, 10000);
+setInterval(tickTracking, 8000);
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   (async () => {
@@ -202,36 +238,36 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       const cfg = await getCfg();
       if (cfg.skipIncognito && sender.tab?.incognito) { sendResponse({ ok: true, skipped: true }); return; }
       const prevId = lastActivity?.id;
+      const prevKey = JSON.stringify(lastActivity);
       lastActivity = msg.activity;
-      if (msg.activity && msg.activity.id !== prevId) {
-        log("info", `Detected: ${msg.activity.name}`, { details: msg.activity.details });
+      if (msg.activity && JSON.stringify(msg.activity) !== prevKey) {
+        if (msg.activity.id !== prevId) log("info", `Detected: ${msg.activity.name}`);
+        await pushPresence();
+      } else if (!msg.activity && prevKey !== "null") {
+        await pushPresence();
       }
-      await pushPresence();
       sendResponse({ ok: true });
     } else if (msg.type === "config:save") {
       await chrome.storage.local.set(msg.data);
-      if (msg.reconnect) { sessionId = null; resumeUrl = null; await loginAndConnect(); }
+      if (msg.reconnect) { sessionId = null; resumeUrl = null; assetCache.clear(); await loginAndConnect(); }
       else await pushPresence();
       sendResponse({ ok: true });
     } else if (msg.type === "status:get") {
-      const { botUser, lastError } = await chrome.storage.local.get(["botUser", "lastError"]);
-      sendResponse({ connected: identified, activity: lastActivity, botUser, lastError });
+      const { botUser, lastError, trackedByApp = {} } = await chrome.storage.local.get(["botUser","lastError","trackedByApp"]);
+      sendResponse({ connected: identified, activity: lastActivity, botUser, lastError, trackedByApp });
     } else if (msg.type === "presence:clear") {
       lastActivity = null; await pushPresence(); sendResponse({ ok: true });
     } else if (msg.type === "disconnect") {
       try { ws?.close(); } catch {}
       await chrome.storage.local.set({ botUser: null });
-      await log("info", "Disconnected");
-      sendResponse({ ok: true });
+      await log("info", "Disconnected"); sendResponse({ ok: true });
     } else if (msg.type === "logs:get") {
       const { logs = [] } = await chrome.storage.local.get("logs");
       sendResponse({ logs });
     } else if (msg.type === "logs:clear") {
-      await chrome.storage.local.set({ logs: [] });
-      sendResponse({ ok: true });
+      await chrome.storage.local.set({ logs: [] }); sendResponse({ ok: true });
     } else if (msg.type === "auth:test") {
-      const v = await validateToken(msg.token);
-      sendResponse(v);
+      const v = await validateToken(msg.token); sendResponse(v);
     }
   })();
   return true;
@@ -245,7 +281,10 @@ chrome.idle.onStateChanged.addListener(async (state) => {
 
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   if (reason === "install") {
-    await chrome.storage.local.set({ enabled: true, status: "online", idleAway: true, skipIncognito: true });
+    await chrome.storage.local.set({
+      enabled: true, status: "online", idleAway: true, skipIncognito: true,
+      showButtons: true, showThumbnails: true, notifyOnConnect: true
+    });
     chrome.tabs.create({ url: chrome.runtime.getURL("welcome.html") });
   }
   loginAndConnect();
