@@ -164,11 +164,12 @@ function RotatingFeatures({ items }: { items: [string, string][] }) {
 
 function Index() {
   const [lang, setLang] = useState<Lang>("en");
+  const [bye, setBye] = useState(false);
   useEffect(() => {
     const saved = localStorage.getItem("aura-lang") as Lang | null;
-    if (saved && T[saved]) { setLang(saved); return; }
-    const nav = (navigator.language || "en").slice(0,2) as Lang;
-    if (T[nav]) setLang(nav);
+    if (saved && T[saved]) setLang(saved);
+    else { const nav = (navigator.language || "en").slice(0,2) as Lang; if (T[nav]) setLang(nav); }
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("goodbye") === "1") setBye(true);
   }, []);
   const change = (l: Lang) => { setLang(l); localStorage.setItem("aura-lang", l); };
   const x = T[lang];
@@ -177,8 +178,22 @@ function Index() {
 
   return (
     <main className="min-h-screen bg-background text-foreground overflow-hidden">
+      {bye && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-background/85 backdrop-blur p-6 animate-[fadeSlide_.4s_ease-out]">
+          <div className="max-w-md w-full rounded-2xl border border-border bg-card p-8 text-center shadow-2xl">
+            <div className="text-5xl mb-4">👋</div>
+            <h2 className="text-2xl font-bold mb-2">{x.bye_h}</h2>
+            <p className="text-muted-foreground mb-6 text-sm leading-relaxed">{x.bye_sub}</p>
+            <div className="flex gap-2 justify-center">
+              <button onClick={download} className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition">{x.download}</button>
+              <button onClick={() => { setBye(false); window.history.replaceState({}, "", "/"); }} className="rounded-lg border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card transition">{x.bye_close}</button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-primary/15 blur-[120px]" />
+        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-primary/15 blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] h-[400px] w-[400px] rounded-full bg-primary/10 blur-[100px]" />
       </div>
 
       <div className="mx-auto max-w-5xl px-6 py-10">
