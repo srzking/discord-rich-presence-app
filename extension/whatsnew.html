@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>What's new in Aura</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="welcome-bg"></div>
+<div class="welcome">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+    <select id="wlang" class="mini lang-sel">
+      <option value="en">EN</option><option value="pt">PT</option><option value="es">ES</option>
+    </select>
+  </div>
+  <div class="brandrow">
+    <img src="icons/icon128.png" alt="Aura" />
+    <div>
+      <h1 style="margin:0">Aura <span id="ver" style="font-size:14px;color:var(--muted);font-weight:500"></span></h1>
+      <p style="margin:0" data-k="tag">A new version is here.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-k="newH">What's new</h2>
+    <ul id="changes" class="changes"></ul>
+  </div>
+
+  <div class="card">
+    <h2 data-k="nextH">Coming next</h2>
+    <ul id="next" class="changes"></ul>
+  </div>
+
+  <a class="cta" href="#" onclick="window.close()" data-k="go">Awesome — close</a>
+</div>
+<script>
+const D = {
+  en: {
+    tag: "A new version is here.", newH: "What's new", nextH: "Coming next", go: "Awesome — close",
+    changes: [
+      "Live status updates without flicker",
+      "Update notifications inside the popup",
+      "Uninstall thank-you page",
+      "Faster reconnection & more reliable presence",
+      "New 'About' tab with version & changelog",
+      "Smoother UI animations and richer landing page",
+      "Bug fixes for status not refreshing"
+    ],
+    next: ["Firefox build", "Spotify desktop sync", "Custom emoji status", "More sites: Letterboxd, AniList, Steam Web"]
+  },
+  pt: {
+    tag: "Nova versão disponível.", newH: "O que há de novo", nextH: "A caminho", go: "Fixe — fechar",
+    changes: [
+      "Estado em direto sem piscar",
+      "Notificações de atualização dentro do popup",
+      "Página de agradecimento ao desinstalar",
+      "Reconexão mais rápida e estado mais fiável",
+      "Novo separador 'Sobre' com versão e changelog",
+      "Animações da UI mais suaves e página inicial melhorada",
+      "Correções: o estado já atualiza sempre"
+    ],
+    next: ["Versão Firefox", "Sincronização Spotify desktop", "Emoji personalizado no estado", "Mais sites: Letterboxd, AniList, Steam Web"]
+  },
+  es: {
+    tag: "Nueva versión disponible.", newH: "Novedades", nextH: "Próximamente", go: "Genial — cerrar",
+    changes: [
+      "Estado en vivo sin parpadeos",
+      "Notificaciones de actualización en el popup",
+      "Página de agradecimiento al desinstalar",
+      "Reconexión más rápida y presencia más fiable",
+      "Nueva pestaña 'Acerca de' con versión y changelog",
+      "Animaciones más suaves y página de inicio mejorada",
+      "Bugs: el estado ya se actualiza siempre"
+    ],
+    next: ["Build para Firefox", "Sincronización Spotify desktop", "Emoji personalizado", "Más sitios: Letterboxd, AniList, Steam Web"]
+  }
+};
+async function apply(l){
+  const d = D[l] || D.en;
+  document.querySelectorAll("[data-k]").forEach(e=>{ if(typeof d[e.dataset.k]==="string") e.textContent = d[e.dataset.k]; });
+  document.getElementById("changes").innerHTML = d.changes.map(c=>`<li>${c}</li>`).join("");
+  document.getElementById("next").innerHTML = d.next.map(c=>`<li>${c}</li>`).join("");
+  await chrome.storage?.local?.set?.({ lang:l });
+}
+(async()=>{
+  const cfg = await chrome.storage?.local?.get?.(["lang"]) || {};
+  let l = cfg.lang || (navigator.language||"en").slice(0,2);
+  if(!D[l]) l="en";
+  document.getElementById("wlang").value = l;
+  document.getElementById("ver").textContent = "v" + (chrome.runtime.getManifest().version);
+  apply(l);
+  await chrome.storage?.local?.set?.({ lastSeenVersion: chrome.runtime.getManifest().version });
+})();
+document.getElementById("wlang").addEventListener("change", e=>apply(e.target.value));
+</script>
+</body>
+</html>

@@ -279,15 +279,34 @@ chrome.idle.onStateChanged.addListener(async (state) => {
   await pushPresence();
 });
 
-chrome.runtime.onInstalled.addListener(async ({ reason }) => {
+// Uninstall thank-you page (works in all Chromium browsers)
+try { chrome.runtime.setUninstallURL("https://discord-rich-presence-app.lovable.app/?goodbye=1"); } catch {}
+
+chrome.runtime.onInstalled.addListener(async ({ reason, previousVersion }) => {
+  const version = chrome.runtime.getManifest().version;
   if (reason === "install") {
     await chrome.storage.local.set({
       enabled: true, status: "online", idleAway: true, skipIncognito: true,
-      showButtons: true, showThumbnails: true, notifyOnConnect: true
+      showButtons: true, showThumbnails: true, notifyOnConnect: true,
+      lastSeenVersion: version
     });
     chrome.tabs.create({ url: chrome.runtime.getURL("welcome.html") });
+  } else if (reason === "update" && previousVersion !== version) {
+    await chrome.storage.local.set({ pendingUpdate: { from: previousVersion, to: version, at: Date.now() } });
+    try {
+      chrome.notifications?.create?.("aura-updated", {
+        type: "basic", iconUrl: chrome.runtime.getURL("icons/icon128.png"),
+        title: `Aura updated to v${version}`,
+        message: "Click to see what's new.",
+        priority: 1
+      });
+    } catch {}
+    chrome.tabs.create({ url: chrome.runtime.getURL("whatsnew.html") });
   }
   loginAndConnect();
+});
+chrome.notifications?.onClicked?.addListener?.((id) => {
+  if (id === "aura-updated") chrome.tabs.create({ url: chrome.runtime.getURL("whatsnew.html") });
 });
 chrome.runtime.onStartup.addListener(() => loginAndConnect());
 chrome.alarms.create("ka", { periodInMinutes: 0.4 });
