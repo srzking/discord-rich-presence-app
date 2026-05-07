@@ -235,6 +235,15 @@ $("#resetBtn")?.addEventListener("click", async () => {
   chrome.runtime.sendMessage({ type: "disconnect" }, () => load());
 });
 
+
+function openPage(url) { chrome.tabs.create({ url: chrome.runtime.getURL(url) }); }
+$("#seeUpdate")?.addEventListener("click", async () => {
+  await chrome.storage.local.set({ lastSeenVersion: chrome.runtime.getManifest().version });
+  openPage("whatsnew.html");
+});
+$("#openWhatsNew")?.addEventListener("click", () => openPage("whatsnew.html"));
+$("#openWelcome")?.addEventListener("click", () => openPage("welcome.html"));
+
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === "log:new" && $("[data-pane='logs']").classList.contains("active")) loadLogs();
   if (msg.type === "auth:ok" || msg.type === "auth:failed") refreshStatus();
