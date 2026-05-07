@@ -80,23 +80,26 @@ function renderBot(botUser, connected) {
   $("#botAvatar").src = av;
 }
 
+function setText(el, val) { if (el && el.textContent !== val) el.textContent = val; }
+function setSrc(el, val) { if (el && el.getAttribute("src") !== val) el.src = val; }
+
 function refreshStatus() {
   chrome.runtime.sendMessage({ type: "status:get" }, async (res) => {
     if (chrome.runtime.lastError || !res) return;
     const pill = $("#statusPill");
-    pill.textContent = __aura_t(lang, res.connected ? "connected" : "offline");
+    setText(pill, __aura_t(lang, res.connected ? "connected" : "offline"));
     pill.className = "pill " + (res.connected ? "on" : "off");
     renderBot(res.botUser, res.connected);
     const a = res.activity;
-    $("#actName").textContent = a ? a.name : "—";
-    $("#actDetails").textContent = a?.details || "";
-    $("#actState").textContent = a?.state || "";
+    setText($("#actName"), a ? a.name : "—");
+    setText($("#actDetails"), a?.details || "");
+    setText($("#actState"), a?.state || "");
     const thumb = $("#actThumb");
-    if (a?.thumbnail) { thumb.src = a.thumbnail; thumb.classList.remove("hidden"); }
+    if (a?.thumbnail) { setSrc(thumb, a.thumbnail); thumb.classList.remove("hidden"); }
     else thumb.classList.add("hidden");
     const { trackedToday = {} } = await chrome.storage.local.get("trackedToday");
     const today = new Date().toISOString().slice(0,10);
-    $("#todayMin").textContent = Math.round((trackedToday[today] || 0) / 60);
+    setText($("#todayMin"), String(Math.round((trackedToday[today] || 0) / 60)));
     // Top apps
     const top = $("#topApps");
     if (top) {
@@ -104,15 +107,17 @@ function refreshStatus() {
         .filter(([k]) => k.startsWith(today + ":"))
         .map(([k,v]) => [k.split(":")[1], v])
         .sort((a,b) => b[1]-a[1]).slice(0,5);
-      if (!entries.length) top.innerHTML = `<div class="muted small" style="padding:6px">${__aura_t(lang,"noApps")}</div>`;
-      else {
-        const max = entries[0][1];
-        top.innerHTML = entries.map(([id,sec]) => {
-          const name = (PLATFORMS.find(p=>p[0]===id)||[id,id])[1];
-          const pct = Math.max(8, Math.round(sec/max*100));
-          return `<div class="ta-row"><span>${name}</span><span class="ta-bar"><span style="width:${pct}%"></span></span><span class="muted small">${Math.round(sec/60)}m</span></div>`;
-        }).join("");
-      }
+      const html = !entries.length
+        ? `<div class="muted small" style="padding:6px">${__aura_t(lang,"noApps")}</div>`
+        : (() => {
+            const max = entries[0][1];
+            return entries.map(([id,sec]) => {
+              const name = (PLATFORMS.find(p=>p[0]===id)||[id,id])[1];
+              const pct = Math.max(8, Math.round(sec/max*100));
+              return `<div class="ta-row"><span>${name}</span><span class="ta-bar"><span style="width:${pct}%"></span></span><span class="muted small">${Math.round(sec/60)}m</span></div>`;
+            }).join("");
+          })();
+      if (top.dataset.html !== html) { top.innerHTML = html; top.dataset.html = html; }
     }
   });
 }
