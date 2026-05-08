@@ -15,7 +15,7 @@ let pushTimer = null;
 
 async function getCfg() {
   return await chrome.storage.local.get([
-    "token", "appId", "status", "customText", "customType",
+    "token", "appId", "status", "customText", "customState", "customImg", "customType",
     "disabledPlatforms", "idleAway", "skipIncognito", "enabled", "botUser",
     "isBotToken", "showButtons", "showThumbnails", "notifyOnConnect"
   ]);
@@ -177,7 +177,14 @@ async function buildPresence(activity) {
 
   let act = activity;
   if (cfg.customText) {
-    act = { id: "custom", name: "Aura", type: parseInt(cfg.customType ?? "0", 10), details: cfg.customText };
+    act = {
+      id: "custom",
+      name: cfg.customText,
+      type: parseInt(cfg.customType ?? "0", 10),
+      details: cfg.customText,
+      state: cfg.customState || undefined,
+      thumbnail: cfg.customImg || undefined,
+    };
   }
   if (act && cfg.disabledPlatforms?.includes(act.id)) act = null;
   if (!act) return { since: 0, activities: [], status, afk: false };
@@ -187,24 +194,25 @@ async function buildPresence(activity) {
   if (cfg.showThumbnails !== false && act.thumbnail && cfg.appId) {
     largeImage = await registerExternalAsset(cfg.appId, act.thumbnail);
   }
-  if (!largeImage && cfg.appId) largeImage = act.id; // fallback to app asset key
+
+  const assets = largeImage ? {
+    large_image: largeImage,
+    large_text: act.details || act.name,
+  } : undefined;
 
   const a = {
-    name: act.name,
+    name: act.name || "Aura",
     type: act.type ?? 0,
-    application_id: cfg.appId || undefined,
     details: act.details || undefined,
     state: act.state || undefined,
     timestamps: act.startTimestamp ? { start: act.startTimestamp } : { start: Date.now() },
-    assets: largeImage ? {
-      large_image: largeImage,
-      large_text: act.details || act.name,
-      small_image: act.id, // platform key as small image (if app has it)
-      small_text: act.name
-    } : undefined,
-    buttons: (cfg.showButtons !== false && act.url) ? ["Open in browser"] : undefined,
-    metadata: (cfg.showButtons !== false && act.url) ? { button_urls: [act.url] } : undefined
   };
+  if (cfg.appId) a.application_id = cfg.appId;
+  if (assets) a.assets = assets;
+  if (cfg.showButtons !== false && act.url && cfg.appId) {
+    a.buttons = ["Open in browser"];
+    a.metadata = { button_urls: [act.url] };
+  }
   return { since: 0, activities: [a], status, afk: false };
 }
 
