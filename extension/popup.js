@@ -1,17 +1,20 @@
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
-const { t } = window.__I18N__;
+const t = window.__I18N__.t;
 
 const PLATFORMS = [
-  ["youtube","YouTube"],["netflix","Netflix"],["spotify","Spotify"],["twitch","Twitch"],
-  ["github","GitHub"],["x","X"],["reddit","Reddit"],["soundcloud","SoundCloud"],
+  ["youtube","YouTube"],["netflix","Netflix"],["spotify","Spotify"],["twitch","Twitch"],["kick","Kick"],
+  ["github","GitHub"],["gitlab","GitLab"],["x","X"],["reddit","Reddit"],["soundcloud","SoundCloud"],
   ["primevideo","Prime Video"],["disneyplus","Disney+"],["hbomax","Max"],
   ["crunchyroll","Crunchyroll"],["stackoverflow","Stack Overflow"],
   ["wikipedia","Wikipedia"],["vscode","VS Code Web"],
   ["applemusic","Apple Music"],["tidal","Tidal"],["deezer","Deezer"],
   ["vimeo","Vimeo"],["linkedin","LinkedIn"],["medium","Medium"],
-  ["notion","Notion"],["figma","Figma"],["chatgpt","ChatGPT"],
-  ["gmail","Gmail"],["pinterest","Pinterest"],["tiktok","TikTok"],
+  ["notion","Notion"],["figma","Figma"],["chatgpt","ChatGPT"],["claude","Claude"],["gemini","Gemini"],
+  ["gmail","Gmail"],["pinterest","Pinterest"],["tiktok","TikTok"],["instagram","Instagram"],
+  ["letterboxd","Letterboxd"],["anilist","AniList"],["mal","MyAnimeList"],["steam","Steam"],
+  ["lastfm","Last.fm"],["bandcamp","Bandcamp"],["genius","Genius"],
+  ["coursera","Coursera"],["udemy","Udemy"],["khan","Khan Academy"],["mdn","MDN"],["duolingo","Duolingo"],
 ];
 
 let lang = "en";
