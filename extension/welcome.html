@@ -21,51 +21,65 @@
     </div>
   </div>
 
-  <p data-k="intro">Aura shows what you're watching, listening to, or browsing on your Discord profile — automatically.</p>
+  <p data-k="intro">Aura shows what you're watching, listening to, or browsing on your Discord profile — automatically. No account needed, no servers in the middle.</p>
 
   <div class="card">
     <h2 data-k="setupH">Setup in 1 minute</h2>
-    <ol>
-      <li data-k="s1">Open <a href="https://discord.com/app" target="_blank">Discord in your browser</a> and log in.</li>
-      <li data-k="s2">Press F12 → Network tab → click any request → copy the <code>Authorization</code> header.</li>
-      <li data-k="s3">Click the Aura icon, paste your token in the Account tab.</li>
-      <li data-k="s4">Hit Login & Connect — your bot/user is detected automatically.</li>
-      <li data-k="s5">Browse a supported site — your profile activity updates live.</li>
-    </ol>
+    <div class="steps">
+      <div class="step"><div><strong data-k="s1t">Open Discord in browser</strong><span data-k="s1">Log in to discord.com on Chrome/Edge/Brave/etc.</span></div></div>
+      <div class="step"><div><strong data-k="s2t">Copy your token</strong><span data-k="s2">F12 → Network → click any request → copy the Authorization header.</span></div></div>
+      <div class="step"><div><strong data-k="s3t">Paste in Aura</strong><span data-k="s3">Click the Aura icon → Account tab → paste token.</span></div></div>
+      <div class="step"><div><strong data-k="s4t">Click Login &amp; Connect</strong><span data-k="s4">Aura validates and shows your account name.</span></div></div>
+      <div class="step"><div><strong data-k="s5t">Browse normally</strong><span data-k="s5">Open YouTube, Spotify, GitHub… your profile updates live.</span></div></div>
+    </div>
   </div>
 
   <div class="card">
     <h2 data-k="featH">What Aura can do</h2>
     <div class="feature-grid">
-      <div class="feat"><strong data-k="f1t">Auto-detect</strong><span data-k="f1">Activity on 27+ sites in real time</span></div>
-      <div class="feat"><strong data-k="f2t">Auto thumbnails</strong><span data-k="f2">Page cover images shown in your presence</span></div>
-      <div class="feat"><strong data-k="f3t">Custom activity</strong><span data-k="f3">Override Playing / Watching / Listening</span></div>
-      <div class="feat"><strong data-k="f4t">Per-site toggles</strong><span data-k="f4">Disable any site, with search</span></div>
+      <div class="feat"><strong data-k="f1t">Auto-detect</strong><span data-k="f1">45+ websites in real time</span></div>
+      <div class="feat"><strong data-k="f2t">Auto thumbnails</strong><span data-k="f2">Page cover image as activity art</span></div>
+      <div class="feat"><strong data-k="f3t">Custom activity</strong><span data-k="f3">With live preview while editing</span></div>
+      <div class="feat"><strong data-k="f4t">By category</strong><span data-k="f4">Streaming, Music, Dev, Social…</span></div>
       <div class="feat"><strong data-k="f5t">Auto-idle</strong><span data-k="f5">Idle status when AFK</span></div>
-      <div class="feat"><strong data-k="f6t">Privacy</strong><span data-k="f6">Skips incognito tabs</span></div>
-      <div class="feat"><strong data-k="f7t">Live logs</strong><span data-k="f7">Activity & connection events</span></div>
-      <div class="feat"><strong data-k="f8t">Time tracker</strong><span data-k="f8">Daily activity counter</span></div>
-      <div class="feat"><strong data-k="f9t">Multilingual</strong><span data-k="f9">EN / PT / ES included</span></div>
+      <div class="feat"><strong data-k="f6t">Privacy</strong><span data-k="f6">Skips incognito, token stays local</span></div>
+      <div class="feat"><strong data-k="f7t">Live logs</strong><span data-k="f7">Every detection &amp; reconnect</span></div>
+      <div class="feat"><strong data-k="f8t">Time tracker</strong><span data-k="f8">Daily activity counter &amp; top apps</span></div>
+      <div class="feat"><strong data-k="f9t">EN / PT / ES</strong><span data-k="f9">Three languages, everywhere</span></div>
     </div>
   </div>
 
   <div class="card">
     <h2 data-k="tipsH">Tips</h2>
     <ul>
-      <li data-k="t1">Your bot token never leaves your browser.</li>
+      <li data-k="t1">Your token never leaves your browser. No servers, no DB.</li>
       <li data-k="t2">Use the master switch in the popup to instantly pause Aura.</li>
       <li data-k="t3">The Logs tab shows every detection and reconnect event.</li>
+      <li data-k="t4">Apps tab is grouped by category — disable any site you don't want.</li>
     </ul>
   </div>
 
   <a class="cta" href="#" onclick="window.close()" data-k="go">Got it — let's go</a>
+  <p class="muted small" style="margin-top:18px;text-align:center">
+    <span data-k="madeBy">Made by</span>
+    <a href="https://srzking.vercel.app" target="_blank" style="color:var(--brand)">SrKing</a>
+  </p>
 </div>
 <script src="i18n.js"></script>
 <script>
 const D = {
-  en: { tag:"Rich Presence for the web.", intro:"Aura updates your Discord profile with what you're watching, listening to, or browsing — automatically.", setupH:"Setup in 1 minute", s1:"Open Discord in your browser and log in.", s2:"Press F12 → Network tab → copy the Authorization header from any request.", s3:"Click the Aura icon and paste your token in the Account tab.", s4:"Hit Login & Connect — Aura detects your account automatically.", s5:"Browse a supported site — your profile activity updates live.", s6:"Done!", featH:"What Aura can do", f1t:"Auto-detect", f1:"Activity on 27+ sites in real time", f2t:"Auto thumbnails", f2:"Page cover images shown in your presence", f3t:"Custom activity", f3:"Override Playing / Watching / Listening", f4t:"Per-site toggles", f4:"Disable any site, with search", f5t:"Auto-idle", f5:"Idle status when AFK", f6t:"Privacy", f6:"Skips incognito tabs", f7t:"Live logs", f7:"Activity & connection events", f8t:"Time tracker", f8:"Daily activity counter", f9t:"Multilingual", f9:"EN / PT / ES included", tipsH:"Tips", t1:"Your token never leaves your browser.", t2:"Use the master switch to instantly pause Aura.", t3:"The Logs tab shows every detection and reconnect event.", go:"Got it — let's go" },
-  pt: { tag:"Rich Presence para a web.", intro:"O Aura atualiza o teu perfil do Discord com o que estás a ver, ouvir ou a navegar — automaticamente.", setupH:"Configura em 1 minuto", s1:"Abre o Discord no browser e faz login.", s2:"F12 → Network → copia o cabeçalho Authorization de qualquer pedido.", s3:"Clica no ícone do Aura e cola o token no separador Conta.", s4:"Carrega em Entrar e Conectar — o Aura deteta a tua conta.", s5:"Abre um site suportado — o teu perfil atualiza-se em direto.", s6:"Pronto!", featH:"O que o Aura faz", f1t:"Auto-deteção", f1:"Atividade em 27+ sites em tempo real", f2t:"Miniaturas auto", f2:"Imagens da página no teu estado", f3t:"Atividade custom", f3:"Personaliza a jogar / ver / ouvir", f4t:"Toggles por site", f4:"Desativa sites com pesquisa", f5t:"Auto-ausente", f5:"Estado ausente quando AFK", f6t:"Privacidade", f6:"Ignora separadores anónimos", f7t:"Logs ao vivo", f7:"Eventos de atividade e ligação", f8t:"Contador", f8:"Tempo diário", f9t:"Multilíngua", f9:"EN / PT / ES incluído", tipsH:"Dicas", t1:"O token nunca sai do navegador.", t2:"Usa o switch geral para parar o Aura.", t3:"O separador Logs mostra deteções e reconexões.", go:"Entendido — vamos lá" },
-  es: { tag:"Rich Presence para la web.", intro:"Aura actualiza tu perfil de Discord con lo que ves, escuchas o navegas — automáticamente.", setupH:"Configura en 1 minuto", s1:"Abre Discord en el navegador e inicia sesión.", s2:"F12 → Network → copia el header Authorization de cualquier petición.", s3:"Pulsa el icono de Aura y pega tu token en la pestaña Cuenta.", s4:"Iniciar sesión — Aura detecta tu cuenta automáticamente.", s5:"Abre un sitio compatible — tu perfil se actualiza en vivo.", s6:"¡Listo!", featH:"Qué puede hacer Aura", f1t:"Auto-detección", f1:"Actividad en 27+ sitios en tiempo real", f2t:"Miniaturas auto", f2:"Imágenes de la página en tu presencia", f3t:"Actividad custom", f3:"Jugando / Viendo / Escuchando", f4t:"Toggles por sitio", f4:"Desactiva sitios con búsqueda", f5t:"Auto-ausente", f5:"Estado ausente cuando AFK", f6t:"Privacidad", f6:"Ignora pestañas incógnito", f7t:"Logs en vivo", f7:"Eventos de actividad y conexión", f8t:"Contador", f8:"Tiempo diario", f9t:"Multilingüe", f9:"EN / PT / ES incluido", tipsH:"Consejos", t1:"Tu token nunca sale del navegador.", t2:"Usa el interruptor general para pausar Aura al instante.", t3:"La pestaña Logs muestra cada detección y reconexión.", go:"Entendido — vamos" }
+  en: { tag:"Rich Presence for the web.", intro:"Aura updates your Discord profile with what you're watching, listening to, or browsing — automatically. No account needed.",
+    setupH:"Setup in 1 minute", s1t:"Open Discord in browser", s1:"Log in to discord.com on Chrome/Edge/Brave/etc.", s2t:"Copy your token", s2:"F12 → Network → click any request → copy the Authorization header.", s3t:"Paste in Aura", s3:"Click the Aura icon → Account tab → paste token.", s4t:"Click Login & Connect", s4:"Aura validates and shows your account name.", s5t:"Browse normally", s5:"Open YouTube, Spotify, GitHub… your profile updates live.",
+    featH:"What Aura can do", f1t:"Auto-detect", f1:"45+ websites in real time", f2t:"Auto thumbnails", f2:"Page cover image as activity art", f3t:"Custom activity", f3:"With live preview while editing", f4t:"By category", f4:"Streaming, Music, Dev, Social…", f5t:"Auto-idle", f5:"Idle status when AFK", f6t:"Privacy", f6:"Skips incognito, token stays local", f7t:"Live logs", f7:"Every detection & reconnect", f8t:"Time tracker", f8:"Daily activity counter & top apps", f9t:"EN / PT / ES", f9:"Three languages, everywhere",
+    tipsH:"Tips", t1:"Your token never leaves your browser. No servers, no DB.", t2:"Use the master switch to instantly pause Aura.", t3:"The Logs tab shows every detection and reconnect event.", t4:"Apps tab is grouped by category — disable any site you don't want.", go:"Got it — let's go", madeBy:"Made by" },
+  pt: { tag:"Rich Presence para a web.", intro:"O Aura atualiza o teu perfil do Discord com o que estás a ver, ouvir ou a navegar — automaticamente. Sem conta necessária.",
+    setupH:"Configura em 1 minuto", s1t:"Abre o Discord no browser", s1:"Faz login em discord.com no Chrome/Edge/Brave/etc.", s2t:"Copia o token", s2:"F12 → Network → clica num pedido → copia o header Authorization.", s3t:"Cola no Aura", s3:"Clica no ícone do Aura → separador Conta → cola o token.", s4t:"Carrega Entrar e Conectar", s4:"O Aura valida e mostra o nome da tua conta.", s5t:"Navega normalmente", s5:"Abre YouTube, Spotify, GitHub… o perfil atualiza-se em direto.",
+    featH:"O que o Aura faz", f1t:"Auto-deteção", f1:"45+ sites em tempo real", f2t:"Miniaturas auto", f2:"Imagem da página como arte da atividade", f3t:"Atividade custom", f3:"Com pré-visualização ao vivo", f4t:"Por categoria", f4:"Streaming, Música, Dev, Social…", f5t:"Auto-ausente", f5:"Estado ausente quando AFK", f6t:"Privacidade", f6:"Ignora anónimos, token fica local", f7t:"Logs ao vivo", f7:"Cada deteção e reconexão", f8t:"Contador", f8:"Tempo diário e top apps", f9t:"EN / PT / ES", f9:"Três idiomas em todo o lado",
+    tipsH:"Dicas", t1:"O token nunca sai do navegador. Sem servidores, sem DB.", t2:"Usa o switch geral para parar o Aura.", t3:"O separador Logs mostra deteções e reconexões.", t4:"O separador Apps está agrupado por categoria.", go:"Entendido — vamos lá", madeBy:"Feito por" },
+  es: { tag:"Rich Presence para la web.", intro:"Aura actualiza tu perfil de Discord con lo que ves, escuchas o navegas — automáticamente. Sin cuenta necesaria.",
+    setupH:"Configura en 1 minuto", s1t:"Abre Discord en el navegador", s1:"Inicia sesión en discord.com en Chrome/Edge/Brave/etc.", s2t:"Copia tu token", s2:"F12 → Network → clic en cualquier petición → copia el header Authorization.", s3t:"Pega en Aura", s3:"Clic en el icono de Aura → Cuenta → pega el token.", s4t:"Pulsa Iniciar sesión", s4:"Aura valida y muestra tu cuenta.", s5t:"Navega normal", s5:"Abre YouTube, Spotify, GitHub… tu perfil se actualiza en vivo.",
+    featH:"Qué puede hacer Aura", f1t:"Auto-detección", f1:"45+ sitios en tiempo real", f2t:"Miniaturas auto", f2:"Imagen de la página como arte", f3t:"Actividad custom", f3:"Con vista previa en vivo", f4t:"Por categoría", f4:"Streaming, Música, Dev, Social…", f5t:"Auto-ausente", f5:"Ausente cuando AFK", f6t:"Privacidad", f6:"Ignora incógnito, token local", f7t:"Logs en vivo", f7:"Cada detección y reconexión", f8t:"Contador", f8:"Tiempo diario y top apps", f9t:"EN / PT / ES", f9:"Tres idiomas en todas partes",
+    tipsH:"Consejos", t1:"Tu token nunca sale del navegador. Sin servidores, sin DB.", t2:"Usa el interruptor general para pausar Aura.", t3:"La pestaña Logs muestra cada detección y reconexión.", t4:"La pestaña Apps está agrupada por categoría.", go:"Entendido — vamos", madeBy:"Hecho por" }
 };
 async function apply(l){
   document.querySelectorAll("[data-k]").forEach(e=>{ e.textContent = (D[l]||D.en)[e.dataset.k]; });
