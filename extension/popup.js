@@ -265,6 +265,7 @@ $("#disableAll")?.addEventListener("click", () => {
 });
 $("#refreshLogs").addEventListener("click", loadLogs);
 $("#clearLogs").addEventListener("click", () => chrome.runtime.sendMessage({ type: "logs:clear" }, loadLogs));
+$("#logFilter")?.addEventListener("input", loadLogs);
 
 function savePlatforms() {
   const disabled = [...$$("#platformList input")].filter(i => !i.checked).map(i => i.dataset.pid);
