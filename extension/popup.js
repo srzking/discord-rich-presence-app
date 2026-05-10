@@ -60,9 +60,10 @@ function renderPlatforms() {
     const items = PLATFORMS.filter(([id,name,c]) => (c||"other") === cat && name.toLowerCase().includes(filter));
     if (!items.length) continue;
     html += `<div class="cat-head">${t(lang,"cat_"+cat)} <span class="muted">(${items.length})</span></div>`;
-    html += items.map(([id, name]) => `
+    html += items.map(([id, name, c, host]) => `
       <label class="platform">
-        <span>${name}</span>
+        <img class="pf-ico" src="${favicon(host||"")}" alt="" loading="lazy" onerror="this.style.visibility='hidden'" />
+        <span class="pf-name">${name}</span>
         <input type="checkbox" data-pid="${id}" ${cachedDisabled.has(id) ? "" : "checked"} />
       </label>`).join("");
   }
