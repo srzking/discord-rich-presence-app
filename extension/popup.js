@@ -3,26 +3,34 @@ const $$ = (s) => document.querySelectorAll(s);
 const t = window.__I18N__.t;
 
 // [id, name, category]
+// [id, name, category, host-for-favicon]
 const PLATFORMS = [
-  ["youtube","YouTube","streaming"],["netflix","Netflix","streaming"],["primevideo","Prime Video","streaming"],
-  ["disneyplus","Disney+","streaming"],["hbomax","Max","streaming"],["crunchyroll","Crunchyroll","streaming"],
-  ["twitch","Twitch","streaming"],["kick","Kick","streaming"],["vimeo","Vimeo","streaming"],["tiktok","TikTok","streaming"],
-  ["spotify","Spotify","music"],["soundcloud","SoundCloud","music"],["applemusic","Apple Music","music"],
-  ["tidal","Tidal","music"],["deezer","Deezer","music"],["lastfm","Last.fm","music"],
-  ["bandcamp","Bandcamp","music"],["genius","Genius","music"],
-  ["github","GitHub","dev"],["gitlab","GitLab","dev"],["stackoverflow","Stack Overflow","dev"],
-  ["vscode","VS Code Web","dev"],["mdn","MDN","dev"],["figma","Figma","dev"],
-  ["x","X","social"],["reddit","Reddit","social"],["instagram","Instagram","social"],
-  ["linkedin","LinkedIn","social"],["pinterest","Pinterest","social"],["letterboxd","Letterboxd","social"],
-  ["anilist","AniList","social"],["mal","MyAnimeList","social"],["steam","Steam","social"],
-  ["chatgpt","ChatGPT","ai"],["claude","Claude","ai"],["gemini","Gemini","ai"],
-  ["coursera","Coursera","learning"],["udemy","Udemy","learning"],["khan","Khan Academy","learning"],
-  ["duolingo","Duolingo","learning"],
-  ["notion","Notion","productivity"],["gmail","Gmail","productivity"],["medium","Medium","productivity"],
-  ["wikipedia","Wikipedia","productivity"],
+  ["youtube","YouTube","streaming","youtube.com"],["netflix","Netflix","streaming","netflix.com"],["primevideo","Prime Video","streaming","primevideo.com"],
+  ["disneyplus","Disney+","streaming","disneyplus.com"],["hbomax","Max","streaming","max.com"],["crunchyroll","Crunchyroll","streaming","crunchyroll.com"],
+  ["twitch","Twitch","streaming","twitch.tv"],["kick","Kick","streaming","kick.com"],["vimeo","Vimeo","streaming","vimeo.com"],["tiktok","TikTok","streaming","tiktok.com"],
+  ["spotify","Spotify","music","open.spotify.com"],["soundcloud","SoundCloud","music","soundcloud.com"],["applemusic","Apple Music","music","music.apple.com"],
+  ["tidal","Tidal","music","tidal.com"],["deezer","Deezer","music","deezer.com"],["lastfm","Last.fm","music","last.fm"],
+  ["bandcamp","Bandcamp","music","bandcamp.com"],["genius","Genius","music","genius.com"],
+  ["github","GitHub","dev","github.com"],["gitlab","GitLab","dev","gitlab.com"],["stackoverflow","Stack Overflow","dev","stackoverflow.com"],
+  ["vscode","VS Code Web","dev","vscode.dev"],["mdn","MDN","dev","developer.mozilla.org"],["figma","Figma","dev","figma.com"],
+  ["huggingface","Hugging Face","dev","huggingface.co"],
+  ["x","X","social","x.com"],["reddit","Reddit","social","reddit.com"],["instagram","Instagram","social","instagram.com"],
+  ["linkedin","LinkedIn","social","linkedin.com"],["pinterest","Pinterest","social","pinterest.com"],["letterboxd","Letterboxd","social","letterboxd.com"],
+  ["anilist","AniList","social","anilist.co"],["mal","MyAnimeList","social","myanimelist.net"],["steam","Steam","social","steampowered.com"],
+  ["telegram","Telegram","social","telegram.org"],["whatsapp","WhatsApp","social","whatsapp.com"],["discordweb","Discord Web","social","discord.com"],
+  ["chatgpt","ChatGPT","ai","chatgpt.com"],["claude","Claude","ai","claude.ai"],["gemini","Gemini","ai","gemini.google.com"],["perplexity","Perplexity","ai","perplexity.ai"],
+  ["coursera","Coursera","learning","coursera.org"],["udemy","Udemy","learning","udemy.com"],["khan","Khan Academy","learning","khanacademy.org"],
+  ["duolingo","Duolingo","learning","duolingo.com"],
+  ["notion","Notion","productivity","notion.so"],["gmail","Gmail","productivity","mail.google.com"],["medium","Medium","productivity","medium.com"],
+  ["wikipedia","Wikipedia","productivity","wikipedia.org"],["googledocs","Google Docs","productivity","docs.google.com"],["fandom","Fandom","productivity","fandom.com"],
+  ["pawsy","Pawsy","furry","pawsy.fun"],["furaffinity","FurAffinity","furry","furaffinity.net"],["e621","e621","furry","e621.net"],
+  ["roblox","Roblox","gaming","roblox.com"],["itchio","itch.io","gaming","itch.io"],["epic","Epic Games","gaming","epicgames.com"],
+  ["amazon","Amazon","shopping","amazon.com"],["ebay","eBay","shopping","ebay.com"],["aliexpress","AliExpress","shopping","aliexpress.com"],
 ];
 
-const CATEGORIES = ["streaming","music","dev","social","ai","learning","productivity","other"];
+const CATEGORIES = ["streaming","music","dev","ai","social","gaming","furry","learning","productivity","shopping","other"];
+
+function favicon(host) { return `https://www.google.com/s2/favicons?sz=32&domain=${host}`; }
 
 let lang = "en";
 
@@ -39,7 +47,7 @@ $$(".tabs button").forEach(b => b.addEventListener("click", () => {
   $$(".pane").forEach(x => x.classList.remove("active"));
   b.classList.add("active");
   $(`[data-pane="${b.dataset.tab}"]`).classList.add("active");
-  if (b.dataset.tab === "logs") loadLogs();
+  if (b.dataset.tab === "settings") loadLogs();
 }));
 
 let cachedDisabled = new Set();
@@ -52,9 +60,10 @@ function renderPlatforms() {
     const items = PLATFORMS.filter(([id,name,c]) => (c||"other") === cat && name.toLowerCase().includes(filter));
     if (!items.length) continue;
     html += `<div class="cat-head">${t(lang,"cat_"+cat)} <span class="muted">(${items.length})</span></div>`;
-    html += items.map(([id, name]) => `
+    html += items.map(([id, name, c, host]) => `
       <label class="platform">
-        <span>${name}</span>
+        <img class="pf-ico" src="${favicon(host||"")}" alt="" loading="lazy" onerror="this.style.visibility='hidden'" />
+        <span class="pf-name">${name}</span>
         <input type="checkbox" data-pid="${id}" ${cachedDisabled.has(id) ? "" : "checked"} />
       </label>`).join("");
   }
@@ -159,8 +168,11 @@ async function send(data, reconnect = false) {
 async function loadLogs() {
   chrome.runtime.sendMessage({ type: "logs:get" }, (res) => {
     const list = $("#logList");
-    if (!res?.logs?.length) { list.innerHTML = `<div class="muted small" style="padding:14px;text-align:center">${t(lang,"noLogs")}</div>`; return; }
-    list.innerHTML = res.logs.map(l => {
+    if (!list) return;
+    const filter = ($("#logFilter")?.value || "").toLowerCase();
+    const logs = (res?.logs || []).filter(l => !filter || (l.message||"").toLowerCase().includes(filter));
+    if (!logs.length) { list.innerHTML = `<div class="muted small" style="padding:14px;text-align:center">${t(lang,"noLogs")}</div>`; return; }
+    list.innerHTML = logs.map(l => {
       const time = new Date(l.t).toLocaleTimeString();
       return `<div class="log log-${l.level}"><span class="log-time">${time}</span><span class="log-msg">${l.message}</span></div>`;
     }).join("");
@@ -253,6 +265,7 @@ $("#disableAll")?.addEventListener("click", () => {
 });
 $("#refreshLogs").addEventListener("click", loadLogs);
 $("#clearLogs").addEventListener("click", () => chrome.runtime.sendMessage({ type: "logs:clear" }, loadLogs));
+$("#logFilter")?.addEventListener("input", loadLogs);
 
 function savePlatforms() {
   const disabled = [...$$("#platformList input")].filter(i => !i.checked).map(i => i.dataset.pid);

@@ -39,7 +39,11 @@ const I18N = {
     madeBy: "Made by",
     customState: "State (line 2)", customImg: "Image URL",
     cat_streaming: "Streaming & Video", cat_music: "Music", cat_dev: "Development",
-    cat_social: "Social", cat_ai: "AI Chat", cat_learning: "Learning", cat_productivity: "Productivity", cat_other: "Other",
+    cat_social: "Social", cat_ai: "AI Chat", cat_learning: "Learning", cat_productivity: "Productivity",
+    cat_furry: "Furry & Community", cat_gaming: "Gaming", cat_shopping: "Shopping", cat_other: "Other",
+    logs_filter: "Filter logs…", account_section: "Account", about_section: "About",
+    appearance: "Appearance", theme: "Theme", themeDark: "Dark", themeLight: "Light",
+    behavior: "Behavior",
   },
   pt: {
     enable: "Ativar / desativar",
@@ -80,7 +84,11 @@ const I18N = {
     madeBy: "Feito por",
     customState: "Estado (linha 2)", customImg: "URL da imagem",
     cat_streaming: "Streaming e Vídeo", cat_music: "Música", cat_dev: "Desenvolvimento",
-    cat_social: "Social", cat_ai: "Chat IA", cat_learning: "Aprendizagem", cat_productivity: "Produtividade", cat_other: "Outros",
+    cat_social: "Social", cat_ai: "Chat IA", cat_learning: "Aprendizagem", cat_productivity: "Produtividade",
+    cat_furry: "Furry e Comunidade", cat_gaming: "Jogos", cat_shopping: "Compras", cat_other: "Outros",
+    logs_filter: "Filtrar registos…", account_section: "Conta", about_section: "Sobre",
+    appearance: "Aparência", theme: "Tema", themeDark: "Escuro", themeLight: "Claro",
+    behavior: "Comportamento",
   },
   es: {
     enable: "Activar / desactivar",
@@ -121,7 +129,11 @@ const I18N = {
     madeBy: "Hecho por",
     customState: "Estado (línea 2)", customImg: "URL de imagen",
     cat_streaming: "Streaming y Vídeo", cat_music: "Música", cat_dev: "Desarrollo",
-    cat_social: "Social", cat_ai: "Chat IA", cat_learning: "Aprendizaje", cat_productivity: "Productividad", cat_other: "Otros",
+    cat_social: "Social", cat_ai: "Chat IA", cat_learning: "Aprendizaje", cat_productivity: "Productividad",
+    cat_furry: "Furry y Comunidad", cat_gaming: "Juegos", cat_shopping: "Compras", cat_other: "Otros",
+    logs_filter: "Filtrar registros…", account_section: "Cuenta", about_section: "Acerca de",
+    appearance: "Apariencia", theme: "Tema", themeDark: "Oscuro", themeLight: "Claro",
+    behavior: "Comportamiento",
   }
 };
 function __aura_t(lang, key) { return (I18N[lang] || I18N.en)[key] || I18N.en[key] || key; }

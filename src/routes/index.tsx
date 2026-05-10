@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Aura — Rich Presence for the Web" },
-      { name: "description", content: "Show what you're watching, listening to or browsing on Discord — automatically. Free Chromium extension supporting 45+ web platforms." },
+      { name: "description", content: "Show what you're watching, listening to or browsing on Discord — automatically. Free Chromium extension supporting 60+ web platforms." },
     ],
   }),
   component: Index,
@@ -26,7 +26,7 @@ const HERO: Record<"en" | "pt" | "es", { badge: string; h1a: string; h1b: string
     ex_now: ["Listening to Spotify", "Watching YouTube", "Playing on GitHub", "Competing on LeetCode"],
     feat_h: "Everything you need",
     feats: [
-      { t: "Auto-detect", d: "45+ websites tracked in real time, grouped by category." },
+      { t: "Auto-detect", d: "60+ websites tracked in real time, grouped by category." },
       { t: "Custom activity", d: "Override with any text, image and type — live preview while you edit." },
       { t: "Privacy first", d: "Token stays in your browser. No telemetry, no DB, no account." },
       { t: "Languages", d: "EN / PT / ES across the extension and the website." },
@@ -43,7 +43,7 @@ const HERO: Record<"en" | "pt" | "es", { badge: string; h1a: string; h1b: string
     ex_now: ["A ouvir no Spotify", "A ver no YouTube", "A jogar no GitHub", "A competir no LeetCode"],
     feat_h: "Tudo o que precisas",
     feats: [
-      { t: "Auto-deteção", d: "45+ sites em tempo real, agrupados por categoria." },
+      { t: "Auto-deteção", d: "60+ sites em tempo real, agrupados por categoria." },
       { t: "Atividade custom", d: "Substitui com qualquer texto, imagem e tipo — preview ao vivo." },
       { t: "Privacidade", d: "O token fica no browser. Sem telemetria, sem DB, sem conta." },
       { t: "Idiomas", d: "EN / PT / ES em toda a extensão e site." },
@@ -60,7 +60,7 @@ const HERO: Record<"en" | "pt" | "es", { badge: string; h1a: string; h1b: string
     ex_now: ["Escuchando en Spotify", "Viendo YouTube", "Jugando en GitHub", "Compitiendo en LeetCode"],
     feat_h: "Todo lo que necesitas",
     feats: [
-      { t: "Auto-detección", d: "45+ sitios en tiempo real, agrupados por categoría." },
+      { t: "Auto-detección", d: "60+ sitios en tiempo real, agrupados por categoría." },
       { t: "Actividad custom", d: "Sustituye con cualquier texto, imagen y tipo — vista previa en vivo." },
       { t: "Privacidad", d: "El token queda en el navegador. Sin telemetría, sin DB, sin cuenta." },
       { t: "Idiomas", d: "EN / PT / ES en toda la extensión y el sitio." },
@@ -70,15 +70,24 @@ const HERO: Record<"en" | "pt" | "es", { badge: string; h1a: string; h1b: string
   },
 };
 
-const CATEGORIES: { name: { en: string; pt: string; es: string }; items: string[] }[] = [
-  { name: { en: "Streaming & Video", pt: "Streaming e Vídeo", es: "Streaming y Vídeo" }, items: ["YouTube","Netflix","Prime Video","Disney+","Max","Crunchyroll","Twitch","Kick","Vimeo","TikTok"] },
-  { name: { en: "Music", pt: "Música", es: "Música" }, items: ["Spotify","SoundCloud","Apple Music","Tidal","Deezer","Last.fm","Bandcamp","Genius"] },
-  { name: { en: "Development", pt: "Desenvolvimento", es: "Desarrollo" }, items: ["GitHub","GitLab","Stack Overflow","VS Code Web","MDN","Figma"] },
-  { name: { en: "Social", pt: "Social", es: "Social" }, items: ["X","Reddit","Instagram","LinkedIn","Pinterest","Letterboxd","AniList","MyAnimeList","Steam"] },
-  { name: { en: "AI Chat", pt: "Chat IA", es: "Chat IA" }, items: ["ChatGPT","Claude","Gemini"] },
-  { name: { en: "Learning", pt: "Aprendizagem", es: "Aprendizaje" }, items: ["Coursera","Udemy","Khan Academy","Duolingo"] },
-  { name: { en: "Productivity", pt: "Produtividade", es: "Productividad" }, items: ["Notion","Gmail","Medium","Wikipedia"] },
+type Cat = { name: { en: string; pt: string; es: string }; items: { n: string; h: string }[] };
+const CATEGORIES: Cat[] = [
+  { name: { en: "Streaming & Video", pt: "Streaming e Vídeo", es: "Streaming y Vídeo" }, items: [
+    {n:"YouTube",h:"youtube.com"},{n:"Netflix",h:"netflix.com"},{n:"Prime Video",h:"primevideo.com"},{n:"Disney+",h:"disneyplus.com"},{n:"Max",h:"max.com"},{n:"Crunchyroll",h:"crunchyroll.com"},{n:"Twitch",h:"twitch.tv"},{n:"Kick",h:"kick.com"},{n:"Vimeo",h:"vimeo.com"},{n:"TikTok",h:"tiktok.com"}] },
+  { name: { en: "Music", pt: "Música", es: "Música" }, items: [
+    {n:"Spotify",h:"spotify.com"},{n:"SoundCloud",h:"soundcloud.com"},{n:"Apple Music",h:"music.apple.com"},{n:"Tidal",h:"tidal.com"},{n:"Deezer",h:"deezer.com"},{n:"Last.fm",h:"last.fm"},{n:"Bandcamp",h:"bandcamp.com"},{n:"Genius",h:"genius.com"}] },
+  { name: { en: "Development & AI", pt: "Dev e IA", es: "Dev e IA" }, items: [
+    {n:"GitHub",h:"github.com"},{n:"GitLab",h:"gitlab.com"},{n:"Stack Overflow",h:"stackoverflow.com"},{n:"VS Code",h:"vscode.dev"},{n:"MDN",h:"developer.mozilla.org"},{n:"Figma",h:"figma.com"},{n:"ChatGPT",h:"chatgpt.com"},{n:"Claude",h:"claude.ai"},{n:"Gemini",h:"gemini.google.com"},{n:"Perplexity",h:"perplexity.ai"},{n:"Hugging Face",h:"huggingface.co"}] },
+  { name: { en: "Social", pt: "Social", es: "Social" }, items: [
+    {n:"X",h:"x.com"},{n:"Reddit",h:"reddit.com"},{n:"Instagram",h:"instagram.com"},{n:"LinkedIn",h:"linkedin.com"},{n:"Pinterest",h:"pinterest.com"},{n:"Letterboxd",h:"letterboxd.com"},{n:"AniList",h:"anilist.co"},{n:"MAL",h:"myanimelist.net"},{n:"Steam",h:"steampowered.com"},{n:"Telegram",h:"telegram.org"},{n:"WhatsApp",h:"whatsapp.com"}] },
+  { name: { en: "Furry & Community", pt: "Furry e Comunidade", es: "Furry y Comunidad" }, items: [
+    {n:"Pawsy",h:"pawsy.fun"},{n:"FurAffinity",h:"furaffinity.net"},{n:"e621",h:"e621.net"}] },
+  { name: { en: "Gaming", pt: "Jogos", es: "Juegos" }, items: [
+    {n:"Roblox",h:"roblox.com"},{n:"itch.io",h:"itch.io"},{n:"Epic Games",h:"epicgames.com"},{n:"Steam",h:"steampowered.com"}] },
+  { name: { en: "Shopping & Productivity", pt: "Compras e Produtividade", es: "Compras y Productividad" }, items: [
+    {n:"Amazon",h:"amazon.com"},{n:"eBay",h:"ebay.com"},{n:"Notion",h:"notion.so"},{n:"Gmail",h:"mail.google.com"},{n:"Google Docs",h:"docs.google.com"},{n:"Medium",h:"medium.com"},{n:"Wikipedia",h:"wikipedia.org"},{n:"Fandom",h:"fandom.com"}] },
 ];
+const fav = (h: string) => `https://www.google.com/s2/favicons?sz=32&domain=${h}`;
 
 function Index() {
   const [lang] = useLang();
@@ -193,7 +202,10 @@ function Index() {
                 <div className="font-semibold mb-3 text-sm">{cat.name[lang]}</div>
                 <div className="flex flex-wrap gap-1.5">
                   {cat.items.map((it) => (
-                    <span key={it} className="rounded-full bg-background/60 border border-border px-2.5 py-0.5 text-xs text-muted-foreground">{it}</span>
+                    <span key={it.n} className="inline-flex items-center gap-1.5 rounded-full bg-background/60 border border-border px-2 py-0.5 text-xs text-muted-foreground">
+                      <img src={fav(it.h)} alt="" width={12} height={12} className="rounded-sm" loading="lazy" />
+                      {it.n}
+                    </span>
                   ))}
                 </div>
               </div>
