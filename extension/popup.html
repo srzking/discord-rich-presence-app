@@ -9,6 +9,7 @@
     <div class="logo">
       <img src="icons/icon128.png" alt="" />
       <strong>Aura</strong>
+      <span id="aboutVer" class="muted small ver">v—</span>
     </div>
     <div class="header-right">
       <select id="lang" class="mini lang-sel" title="Language">
@@ -42,12 +43,9 @@
 
   <div class="tabs">
     <button data-tab="now" data-i18n="now" class="active">Now</button>
-    <button data-tab="account" data-i18n="account">Account</button>
     <button data-tab="custom" data-i18n="custom">Custom</button>
     <button data-tab="apps" data-i18n="apps">Apps</button>
-    <button data-tab="logs" data-i18n="logs">Logs</button>
     <button data-tab="settings" data-i18n="settings">Settings</button>
-    <button data-tab="about" data-i18n="about">About</button>
   </div>
 
   <section data-pane="now" class="pane active">
@@ -77,17 +75,6 @@
     <div class="muted small" style="margin-top:10px" data-i18n="topApps">Top apps today</div>
     <div id="topApps" class="top-apps"></div>
     <button id="clear" class="ghost full" data-i18n="clearPresence">Clear presence</button>
-  </section>
-
-  <section data-pane="account" class="pane">
-    <label data-i18n="userToken">Discord Token</label>
-    <input id="token" type="password" placeholder="..." />
-    <p class="muted small" data-i18n="userTokenHint">Your token logs you in as your own account so the activity appears on your profile.</p>
-    <label><span data-i18n="appId">Application ID</span> <span class="muted" data-i18n="appIdHint">(optional, for images)</span></label>
-    <input id="appId" type="text" placeholder="123456789012345678" />
-    <button id="save" class="primary full" data-i18n="loginConnect">Login & Connect</button>
-    <div id="loginStatus" class="login-status hidden"></div>
-    <p class="hint"><span data-i18n="helpHint">Need help?</span> <a href="welcome.html" target="_blank" data-i18n="setupGuide">Read the setup guide →</a></p>
   </section>
 
   <section data-pane="custom" class="pane">
@@ -131,61 +118,74 @@
     <div id="platformList" class="platform-list"></div>
   </section>
 
-  <section data-pane="logs" class="pane">
-    <div class="row">
-      <button id="refreshLogs" class="ghost" data-i18n="refresh">Refresh</button>
-      <button id="clearLogs" class="ghost" data-i18n="clearLogs">Clear logs</button>
-    </div>
-    <div id="logList" class="log-list"></div>
-  </section>
-
   <section data-pane="settings" class="pane">
-    <label class="check">
-      <input id="idleAway" type="checkbox" />
-      <span data-i18n="setIdle">Set status to idle when AFK</span>
-    </label>
-    <label class="check">
-      <input id="skipIncognito" type="checkbox" />
-      <span data-i18n="skipIncog">Don't track incognito tabs</span>
-    </label>
-    <label class="check">
-      <input id="showButtons" type="checkbox" />
-      <span data-i18n="showButtons">Show 'Open' button on activity</span>
-    </label>
-    <label class="check">
-      <input id="showThumbnails" type="checkbox" />
-      <span data-i18n="showThumbnails">Use page image as activity thumbnail</span>
-    </label>
-    <label class="check">
-      <input id="notifyOnConnect" type="checkbox" />
-      <span data-i18n="notifyConnect">Notify when connected</span>
-    </label>
-    <h3 class="muted small" style="margin-top:14px" data-i18n="manageSettings">Manage settings</h3>
-    <div class="row">
-      <button id="exportBtn" class="ghost" data-i18n="exportCfg">Export</button>
-      <button id="importBtn" class="ghost" data-i18n="importCfg">Import</button>
-      <input id="importFile" type="file" accept="application/json" hidden />
-    </div>
-    <button id="disconnectBtn" class="ghost full" data-i18n="disconnect">Disconnect</button>
-    <button id="resetBtn" class="ghost full" data-i18n="resetAll" style="color:var(--red);border-color:rgba(237,66,69,.3)">Reset everything</button>
-  </section>
+    <details class="sect" open>
+      <summary data-i18n="account_section">Account</summary>
+      <label data-i18n="userToken">Discord Token</label>
+      <input id="token" type="password" placeholder="..." />
+      <p class="muted small" data-i18n="userTokenHint">Your token logs you in as your own account so the activity appears on your profile.</p>
+      <label><span data-i18n="appId">Application ID</span> <span class="muted" data-i18n="appIdHint">(optional, for images)</span></label>
+      <input id="appId" type="text" placeholder="123456789012345678" />
+      <button id="save" class="primary full" data-i18n="loginConnect">Login & Connect</button>
+      <div id="loginStatus" class="login-status hidden"></div>
+      <button id="disconnectBtn" class="ghost full" data-i18n="disconnect">Disconnect</button>
+    </details>
 
-  <section data-pane="about" class="pane">
-    <div class="about-card">
-      <img src="icons/icon128.png" class="about-icon" alt="" />
-      <div>
-        <strong>Aura</strong>
-        <div class="muted small" id="aboutVer" style="margin:0">v—</div>
+    <details class="sect">
+      <summary data-i18n="behavior">Behavior</summary>
+      <label class="check">
+        <input id="idleAway" type="checkbox" />
+        <span data-i18n="setIdle">Set status to idle when AFK</span>
+      </label>
+      <label class="check">
+        <input id="skipIncognito" type="checkbox" />
+        <span data-i18n="skipIncog">Don't track incognito tabs</span>
+      </label>
+      <label class="check">
+        <input id="showButtons" type="checkbox" />
+        <span data-i18n="showButtons">Show 'Open' button on activity</span>
+      </label>
+      <label class="check">
+        <input id="showThumbnails" type="checkbox" />
+        <span data-i18n="showThumbnails">Use page image as activity thumbnail</span>
+      </label>
+      <label class="check">
+        <input id="notifyOnConnect" type="checkbox" />
+        <span data-i18n="notifyConnect">Notify when connected</span>
+      </label>
+    </details>
+
+    <details class="sect">
+      <summary data-i18n="logs">Logs</summary>
+      <input id="logFilter" type="text" data-i18n-ph="logs_filter" placeholder="Filter logs…" class="search" />
+      <div class="row">
+        <button id="refreshLogs" class="ghost" data-i18n="refresh">Refresh</button>
+        <button id="clearLogs" class="ghost" data-i18n="clearLogs">Clear logs</button>
       </div>
-    </div>
-    <p class="muted small" data-i18n="aboutBlurb">Rich Presence for the open web. Your activity, on your Discord profile, automatically.</p>
-    <button id="openWhatsNew" class="ghost full" data-i18n="seeNew">See what's new</button>
-    <button id="openWelcome" class="ghost full" data-i18n="setupGuide">Read the setup guide →</button>
-    <p class="muted small" style="margin-top:14px;text-align:center">
-      <span data-i18n="madeBy">Made by</span>
-      <a href="https://srzking.vercel.app" target="_blank" style="color:var(--brand);text-decoration:none">SrKing</a>
-    </p>
-    <p class="muted small" style="text-align:center" data-i18n="madeWith">Crafted with ♥ — not affiliated with Discord.</p>
+      <div id="logList" class="log-list"></div>
+    </details>
+
+    <details class="sect">
+      <summary data-i18n="manageSettings">Manage settings</summary>
+      <div class="row">
+        <button id="exportBtn" class="ghost" data-i18n="exportCfg">Export</button>
+        <button id="importBtn" class="ghost" data-i18n="importCfg">Import</button>
+        <input id="importFile" type="file" accept="application/json" hidden />
+      </div>
+      <button id="resetBtn" class="ghost full" data-i18n="resetAll" style="color:var(--red);border-color:rgba(237,66,69,.3)">Reset everything</button>
+    </details>
+
+    <details class="sect">
+      <summary data-i18n="about_section">About</summary>
+      <p class="muted small" data-i18n="aboutBlurb">Rich Presence for the open web.</p>
+      <button id="openWhatsNew" class="ghost full" data-i18n="seeNew">See what's new</button>
+      <button id="openWelcome" class="ghost full" data-i18n="setupGuide">Read the setup guide →</button>
+      <p class="muted small" style="margin-top:10px;text-align:center">
+        <span data-i18n="madeBy">Made by</span>
+        <a href="https://srzking.vercel.app" target="_blank" style="color:var(--brand);text-decoration:none">SrKing</a>
+      </p>
+      <p class="muted small" style="text-align:center" data-i18n="madeWith">Crafted with ♥ — not affiliated with Discord.</p>
+    </details>
   </section>
 
   <script src="i18n.js"></script>
