@@ -47,7 +47,7 @@ $$(".tabs button").forEach(b => b.addEventListener("click", () => {
   $$(".pane").forEach(x => x.classList.remove("active"));
   b.classList.add("active");
   $(`[data-pane="${b.dataset.tab}"]`).classList.add("active");
-  if (b.dataset.tab === "logs") loadLogs();
+  if (b.dataset.tab === "settings") loadLogs();
 }));
 
 let cachedDisabled = new Set();
