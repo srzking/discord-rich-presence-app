@@ -168,8 +168,11 @@ async function send(data, reconnect = false) {
 async function loadLogs() {
   chrome.runtime.sendMessage({ type: "logs:get" }, (res) => {
     const list = $("#logList");
-    if (!res?.logs?.length) { list.innerHTML = `<div class="muted small" style="padding:14px;text-align:center">${t(lang,"noLogs")}</div>`; return; }
-    list.innerHTML = res.logs.map(l => {
+    if (!list) return;
+    const filter = ($("#logFilter")?.value || "").toLowerCase();
+    const logs = (res?.logs || []).filter(l => !filter || (l.message||"").toLowerCase().includes(filter));
+    if (!logs.length) { list.innerHTML = `<div class="muted small" style="padding:14px;text-align:center">${t(lang,"noLogs")}</div>`; return; }
+    list.innerHTML = logs.map(l => {
       const time = new Date(l.t).toLocaleTimeString();
       return `<div class="log log-${l.level}"><span class="log-time">${time}</span><span class="log-msg">${l.message}</span></div>`;
     }).join("");
