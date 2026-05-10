@@ -70,6 +70,22 @@
     { id: "khan", match: h => h.includes("khanacademy.org"), detect: () => ({ name: "Khan Academy", type: 0, details: "Studying", state: document.title.split("|")[0]?.trim() }) },
     { id: "mdn", match: h => h.includes("developer.mozilla.org"), detect: () => ({ name: "MDN", type: 0, details: "Reading docs", state: document.title.split("|")[0]?.trim() }) },
     { id: "duolingo", match: h => h.includes("duolingo.com"), detect: () => ({ name: "Duolingo", type: 0, details: "Learning a language" }) },
+    { id: "pawsy", match: h => h.includes("pawsy.fun") || h.includes("pawsy.gay"), detect: () => ({ name: "Pawsy", type: 0, details: "Hanging out on Pawsy", state: document.title.split("|")[0]?.trim() }) },
+    { id: "furaffinity", match: h => h.includes("furaffinity.net"), detect: () => ({ name: "FurAffinity", type: 0, details: "Browsing FA", state: document.title.split("--")[0]?.trim() }) },
+    { id: "e621", match: h => h.includes("e621.net"), detect: () => ({ name: "e621", type: 0, details: "Browsing", state: document.title.split("-")[0]?.trim() }) },
+    { id: "telegram", match: h => h.includes("web.telegram.org"), detect: () => ({ name: "Telegram", type: 0, details: "Chatting", state: document.title }) },
+    { id: "whatsapp", match: h => h.includes("web.whatsapp.com"), detect: () => ({ name: "WhatsApp", type: 0, details: "Chatting", state: document.title }) },
+    { id: "discordweb", match: h => h.includes("discord.com/channels") || h.includes("discord.com/app"), detect: () => ({ name: "Discord Web", type: 0, details: "On Discord Web" }) },
+    { id: "amazon", match: h => h.includes("amazon.") && !h.includes("amazon.com/gp/video"), detect: () => ({ name: "Amazon", type: 0, details: "Shopping", state: document.title.split(":")[0]?.trim() }) },
+    { id: "ebay", match: h => h.includes("ebay."), detect: () => ({ name: "eBay", type: 0, details: "Shopping", state: document.title.split("|")[0]?.trim() }) },
+    { id: "aliexpress", match: h => h.includes("aliexpress."), detect: () => ({ name: "AliExpress", type: 0, details: "Shopping" }) },
+    { id: "roblox", match: h => h.includes("roblox.com"), detect: () => ({ name: "Roblox", type: 0, details: "Browsing Roblox", state: document.title.split("-")[0]?.trim() }) },
+    { id: "itchio", match: h => h.includes("itch.io"), detect: () => ({ name: "itch.io", type: 0, details: "Indie games", state: document.title.split(" by ")[0]?.trim() }) },
+    { id: "epic", match: h => h.includes("epicgames.com"), detect: () => ({ name: "Epic Games", type: 0, details: "Browsing store" }) },
+    { id: "huggingface", match: h => h.includes("huggingface.co"), detect: () => ({ name: "Hugging Face", type: 0, details: "ML models", state: document.title }) },
+    { id: "perplexity", match: h => h.includes("perplexity.ai"), detect: () => ({ name: "Perplexity", type: 0, details: "Searching with AI" }) },
+    { id: "googledocs", match: h => h.includes("docs.google.com"), detect: () => ({ name: "Google Docs", type: 0, details: "Editing a doc", state: document.title.split(" - ")[0]?.trim() }) },
+    { id: "fandom", match: h => h.includes("fandom.com"), detect: () => ({ name: "Fandom", type: 0, details: "Reading wiki", state: document.title.split("|")[0]?.trim() }) },
   ];
 
   function getThumb() {
