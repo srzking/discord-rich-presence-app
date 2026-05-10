@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Aura — Rich Presence for the Web" },
-      { name: "description", content: "Show what you're watching, listening to or browsing on Discord — automatically. Free Chromium extension supporting 45+ web platforms." },
+      { name: "description", content: "Show what you're watching, listening to or browsing on Discord — automatically. Free Chromium extension supporting 60+ web platforms." },
     ],
   }),
   component: Index,
@@ -26,7 +26,7 @@ const HERO: Record<"en" | "pt" | "es", { badge: string; h1a: string; h1b: string
     ex_now: ["Listening to Spotify", "Watching YouTube", "Playing on GitHub", "Competing on LeetCode"],
     feat_h: "Everything you need",
     feats: [
-      { t: "Auto-detect", d: "45+ websites tracked in real time, grouped by category." },
+      { t: "Auto-detect", d: "60+ websites tracked in real time, grouped by category." },
       { t: "Custom activity", d: "Override with any text, image and type — live preview while you edit." },
       { t: "Privacy first", d: "Token stays in your browser. No telemetry, no DB, no account." },
       { t: "Languages", d: "EN / PT / ES across the extension and the website." },
@@ -43,7 +43,7 @@ const HERO: Record<"en" | "pt" | "es", { badge: string; h1a: string; h1b: string
     ex_now: ["A ouvir no Spotify", "A ver no YouTube", "A jogar no GitHub", "A competir no LeetCode"],
     feat_h: "Tudo o que precisas",
     feats: [
-      { t: "Auto-deteção", d: "45+ sites em tempo real, agrupados por categoria." },
+      { t: "Auto-deteção", d: "60+ sites em tempo real, agrupados por categoria." },
       { t: "Atividade custom", d: "Substitui com qualquer texto, imagem e tipo — preview ao vivo." },
       { t: "Privacidade", d: "O token fica no browser. Sem telemetria, sem DB, sem conta." },
       { t: "Idiomas", d: "EN / PT / ES em toda a extensão e site." },
@@ -60,7 +60,7 @@ const HERO: Record<"en" | "pt" | "es", { badge: string; h1a: string; h1b: string
     ex_now: ["Escuchando en Spotify", "Viendo YouTube", "Jugando en GitHub", "Compitiendo en LeetCode"],
     feat_h: "Todo lo que necesitas",
     feats: [
-      { t: "Auto-detección", d: "45+ sitios en tiempo real, agrupados por categoría." },
+      { t: "Auto-detección", d: "60+ sitios en tiempo real, agrupados por categoría." },
       { t: "Actividad custom", d: "Sustituye con cualquier texto, imagen y tipo — vista previa en vivo." },
       { t: "Privacidad", d: "El token queda en el navegador. Sin telemetría, sin DB, sin cuenta." },
       { t: "Idiomas", d: "EN / PT / ES en toda la extensión y el sitio." },
