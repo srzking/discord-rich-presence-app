@@ -84,7 +84,11 @@ const I18N = {
     madeBy: "Feito por",
     customState: "Estado (linha 2)", customImg: "URL da imagem",
     cat_streaming: "Streaming e Vídeo", cat_music: "Música", cat_dev: "Desenvolvimento",
-    cat_social: "Social", cat_ai: "Chat IA", cat_learning: "Aprendizagem", cat_productivity: "Produtividade", cat_other: "Outros",
+    cat_social: "Social", cat_ai: "Chat IA", cat_learning: "Aprendizagem", cat_productivity: "Produtividade",
+    cat_furry: "Furry e Comunidade", cat_gaming: "Jogos", cat_shopping: "Compras", cat_other: "Outros",
+    logs_filter: "Filtrar registos…", account_section: "Conta", about_section: "Sobre",
+    appearance: "Aparência", theme: "Tema", themeDark: "Escuro", themeLight: "Claro",
+    behavior: "Comportamento",
   },
   es: {
     enable: "Activar / desactivar",
