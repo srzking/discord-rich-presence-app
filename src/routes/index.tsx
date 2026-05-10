@@ -202,7 +202,10 @@ function Index() {
                 <div className="font-semibold mb-3 text-sm">{cat.name[lang]}</div>
                 <div className="flex flex-wrap gap-1.5">
                   {cat.items.map((it) => (
-                    <span key={it} className="rounded-full bg-background/60 border border-border px-2.5 py-0.5 text-xs text-muted-foreground">{it}</span>
+                    <span key={it.n} className="inline-flex items-center gap-1.5 rounded-full bg-background/60 border border-border px-2 py-0.5 text-xs text-muted-foreground">
+                      <img src={fav(it.h)} alt="" width={12} height={12} className="rounded-sm" loading="lazy" />
+                      {it.n}
+                    </span>
                   ))}
                 </div>
               </div>
