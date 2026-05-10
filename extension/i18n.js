@@ -129,7 +129,11 @@ const I18N = {
     madeBy: "Hecho por",
     customState: "Estado (línea 2)", customImg: "URL de imagen",
     cat_streaming: "Streaming y Vídeo", cat_music: "Música", cat_dev: "Desarrollo",
-    cat_social: "Social", cat_ai: "Chat IA", cat_learning: "Aprendizaje", cat_productivity: "Productividad", cat_other: "Otros",
+    cat_social: "Social", cat_ai: "Chat IA", cat_learning: "Aprendizaje", cat_productivity: "Productividad",
+    cat_furry: "Furry y Comunidad", cat_gaming: "Juegos", cat_shopping: "Compras", cat_other: "Otros",
+    logs_filter: "Filtrar registros…", account_section: "Cuenta", about_section: "Acerca de",
+    appearance: "Apariencia", theme: "Tema", themeDark: "Oscuro", themeLight: "Claro",
+    behavior: "Comportamiento",
   }
 };
 function __aura_t(lang, key) { return (I18N[lang] || I18N.en)[key] || I18N.en[key] || key; }
