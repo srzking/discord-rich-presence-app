@@ -39,7 +39,11 @@ const I18N = {
     madeBy: "Made by",
     customState: "State (line 2)", customImg: "Image URL",
     cat_streaming: "Streaming & Video", cat_music: "Music", cat_dev: "Development",
-    cat_social: "Social", cat_ai: "AI Chat", cat_learning: "Learning", cat_productivity: "Productivity", cat_other: "Other",
+    cat_social: "Social", cat_ai: "AI Chat", cat_learning: "Learning", cat_productivity: "Productivity",
+    cat_furry: "Furry & Community", cat_gaming: "Gaming", cat_shopping: "Shopping", cat_other: "Other",
+    logs_filter: "Filter logs…", account_section: "Account", about_section: "About",
+    appearance: "Appearance", theme: "Theme", themeDark: "Dark", themeLight: "Light",
+    behavior: "Behavior",
   },
   pt: {
     enable: "Ativar / desativar",
