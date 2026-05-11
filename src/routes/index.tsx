@@ -84,11 +84,19 @@ function Index() {
   const [exIdx, setExIdx] = useState(0);
   const [bye, setBye] = useState(false);
 
+  const [elapsed, setElapsed] = useState(0);
+  const sample = SAMPLES[exIdx];
+  const verbLabel = (sample.verb as any)[lang] as string;
+
   useEffect(() => {
     if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("goodbye") === "1") setBye(true);
-    const i = setInterval(() => setExIdx((n) => (n + 1) % x.ex_now.length), 3000);
-    return () => clearInterval(i);
-  }, [x.ex_now.length]);
+    const i = setInterval(() => { setExIdx((n) => (n + 1) % SAMPLES.length); setElapsed(0); }, 4500);
+    const e = setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => { clearInterval(i); clearInterval(e); };
+  }, []);
+
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
+  const ss = String(elapsed % 60).padStart(2, "0");
 
   return (
     <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -143,25 +151,90 @@ function Index() {
           <p className="mt-4 text-xs text-muted-foreground">{x.free}</p>
         </section>
 
-        {/* Live example */}
-        <section className="mt-24 flex justify-center">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-5 shadow-2xl shadow-primary/10 animate-[fadeSlide_.9s_ease-out]">
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-3">{x.example_h}</div>
-            <div className="rounded-xl bg-background/60 border border-border p-4">
-              <div key={exIdx} className="text-[10px] uppercase tracking-wider text-primary font-bold mb-3 animate-[fadeSlide_.4s_ease-out]">
-                {x.ex_now[exIdx]}
-              </div>
-              <div className="flex gap-3">
-                <div className="relative h-16 w-16 rounded-md bg-gradient-to-br from-primary to-purple-500 flex-none animate-pulse" />
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold truncate">Midnight City</div>
-                  <div className="text-xs text-muted-foreground truncate">M83 — Hurry Up, We're Dreaming</div>
-                  <div className="mt-2 h-1 rounded-full bg-border overflow-hidden">
-                    <div className="h-full bg-primary animate-[grow_3s_ease-in-out_infinite]" />
-                  </div>
+        {/* Live example: Discord profile + extension popup */}
+        <section className="mt-20 grid md:grid-cols-2 gap-6 items-start">
+          {/* Discord profile card */}
+          <div className="animate-[fadeSlide_.9s_ease-out]">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-3 text-center md:text-left">{x.example_h}</div>
+            <div className="rounded-2xl bg-[#232428] border border-[#1e1f22] p-4 shadow-2xl shadow-primary/10 text-white">
+              <div className="flex items-center gap-3 pb-3 border-b border-[#1e1f22]">
+                <div className="relative">
+                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-purple-500 grid place-items-center text-lg font-bold">A</div>
+                  <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-[#23a55a] border-2 border-[#232428]" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-semibold text-sm">aura.user</div>
+                  <div className="text-[11px] text-[#b5bac1]">Online</div>
                 </div>
               </div>
-              <button className="mt-3 w-full rounded-md border border-border bg-card text-xs py-2 hover:bg-background transition">Open in browser</button>
+              <div className="pt-3">
+                <div key={exIdx} className="text-[11px] uppercase tracking-wider font-bold text-[#b5bac1] mb-2 animate-[fadeSlide_.4s_ease-out]">
+                  {verbLabel}
+                </div>
+                <div className="flex gap-3">
+                  <div className="relative h-[72px] w-[72px] rounded-md flex-none overflow-hidden ring-1 ring-black/20" style={{ background: sample.color }}>
+                    <img src={fav(sample.host)} alt="" className="absolute inset-0 m-auto h-10 w-10" style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,.5))" }} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-[15px] truncate leading-tight">{sample.name}</div>
+                    <div className="text-[13px] truncate text-[#dbdee1]">{sample.details}</div>
+                    <div className="text-[12px] truncate text-[#b5bac1]">{sample.state}</div>
+                    <div className="text-[11px] text-[#b5bac1] mt-1">{mm}:{ss} {x.elapsed}</div>
+                  </div>
+                </div>
+                <button className="mt-3 w-full rounded-[3px] bg-[#4e5058] hover:bg-[#5d5f66] text-[13px] font-medium py-1.5 transition">{x.open_btn}</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Extension popup mockup */}
+          <div className="animate-[fadeSlide_1s_ease-out]">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-3 text-center md:text-left">{x.popup_h}</div>
+            <div className="mx-auto md:ml-0 w-full max-w-[340px] rounded-xl border border-border bg-[#0d0f14] shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2.5 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <div className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-purple-500" />
+                  <strong className="text-sm">Aura</strong>
+                  <span className="text-[10px] text-muted-foreground">v1.7.0</span>
+                </div>
+                <div className="h-4 w-8 rounded-full bg-primary relative"><span className="absolute right-0.5 top-0.5 h-3 w-3 rounded-full bg-white" /></div>
+              </div>
+              <div className="flex border-b border-border text-[11px]">
+                {["Now", "Custom", "Apps", "Settings"].map((tab, i) => (
+                  <div key={tab} className={`flex-1 text-center py-2 ${i === 0 ? "text-primary border-b-2 border-primary" : "text-muted-foreground"}`}>{tab}</div>
+                ))}
+              </div>
+              <div className="p-3 space-y-2.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#23a55a]/20 text-[#23a55a]">connected</span>
+                  <span className="text-[11px] text-muted-foreground ml-auto">aura.user</span>
+                </div>
+                <div className="rounded-md border border-border bg-card/60 p-2.5 flex gap-2.5">
+                  <div className="h-10 w-10 rounded flex-none grid place-items-center" style={{ background: sample.color }}>
+                    <img src={fav(sample.host)} className="h-5 w-5" alt="" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] uppercase text-muted-foreground">Now showing</div>
+                    <div className="text-xs font-semibold truncate">{sample.name}</div>
+                    <div className="text-[11px] text-muted-foreground truncate">{sample.details}</div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="rounded-md border border-border bg-card/40 py-1.5">
+                    <div className="text-[10px] text-muted-foreground">Today</div>
+                    <div className="text-sm font-bold">42m</div>
+                  </div>
+                  <div className="rounded-md border border-border bg-card/40 py-1.5">
+                    <div className="text-[10px] text-muted-foreground">Streak</div>
+                    <div className="text-sm font-bold">7d 🔥</div>
+                  </div>
+                  <div className="rounded-md border border-border bg-card/40 py-1.5">
+                    <div className="text-[10px] text-muted-foreground">Apps</div>
+                    <div className="text-sm font-bold">12</div>
+                  </div>
+                </div>
+                <button className="w-full text-[11px] py-1.5 rounded border border-border text-muted-foreground hover:bg-card transition">⏸ Pause for 30 min</button>
+              </div>
             </div>
           </div>
         </section>
