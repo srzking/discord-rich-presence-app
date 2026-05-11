@@ -86,6 +86,11 @@
     { id: "perplexity", match: h => h.includes("perplexity.ai"), detect: () => ({ name: "Perplexity", type: 0, details: "Searching with AI" }) },
     { id: "googledocs", match: h => h.includes("docs.google.com"), detect: () => ({ name: "Google Docs", type: 0, details: "Editing a doc", state: document.title.split(" - ")[0]?.trim() }) },
     { id: "fandom", match: h => h.includes("fandom.com"), detect: () => ({ name: "Fandom", type: 0, details: "Reading wiki", state: document.title.split("|")[0]?.trim() }) },
+    { id: "appletv", match: h => h.includes("tv.apple.com"), detect: () => ({ name: "Apple TV+", type: 3, details: document.title }) },
+    { id: "hotstar", match: h => h.includes("hotstar.com"), detect: () => ({ name: "Hotstar", type: 3, details: document.title }) },
+    { id: "yandexmusic", match: h => h.includes("music.yandex."), detect: () => ({ name: "Yandex Music", type: 2, details: document.title }) },
+    { id: "paramount", match: h => h.includes("paramountplus.com"), detect: () => ({ name: "Paramount+", type: 3, details: document.title }) },
+    { id: "anilab", match: h => h.includes("anilab.to") || h.includes("aniwave."), detect: () => ({ name: "Anime Stream", type: 3, details: document.title }) },
   ];
 
   function getThumb() {
