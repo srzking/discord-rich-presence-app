@@ -16,59 +16,46 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const HERO: Record<"en" | "pt" | "es", { badge: string; h1a: string; h1b: string; sub: string; download: string; free: string; example_h: string; ex_now: string[]; feat_h: string; feats: { t: string; d: string }[]; plat_h: string; plat_sub: string }> = {
-  en: {
-    badge: "Discord Rich Presence — for the open web",
-    h1a: "Your aura,", h1b: "wherever you browse.",
-    sub: "Tiny extension. Updates your Discord profile with whatever you're watching, listening to, or doing on the web. No account, no servers.",
-    download: "Download", free: "Free · Chromium · No account · No DB",
-    example_h: "Looks like this on your profile",
-    ex_now: ["Listening to Spotify", "Watching YouTube", "Playing on GitHub", "Competing on LeetCode"],
-    feat_h: "Everything you need",
+type Verb = { en: string; pt: string; es: string };
+type Sample = { verb: Verb; name: string; details: string; state: string; host: string; color: string; type: 0 | 2 | 3 };
+
+const SAMPLES: Sample[] = [
+  { verb: { en: "Listening to Spotify", pt: "A ouvir no Spotify", es: "Escuchando en Spotify" }, name: "Spotify", details: "Midnight City", state: "M83 — Hurry Up, We're Dreaming", host: "spotify.com", color: "#1DB954", type: 2 },
+  { verb: { en: "Watching YouTube", pt: "A ver no YouTube", es: "Viendo YouTube" }, name: "YouTube", details: "How a CPU is made", details2: "Branch Education · 4.2M views", state: "Branch Education · 4.2M views", host: "youtube.com", color: "#FF0033", type: 3 },
+  { verb: { en: "Playing on Twitch", pt: "A ver Twitch", es: "Viendo Twitch" }, name: "Twitch", details: "shroud", state: "Counter-Strike 2 · 38k viewers", host: "twitch.tv", color: "#9146FF", type: 3 },
+  { verb: { en: "Browsing GitHub", pt: "No GitHub", es: "En GitHub" }, name: "GitHub", details: "vercel/next.js", state: "Reading pull request #58213", host: "github.com", color: "#6e5494", type: 0 },
+  { verb: { en: "Hanging on Pawsy", pt: "Na Pawsy", es: "En Pawsy" }, name: "Pawsy", details: "Browsing the den", state: "#general · 412 online", host: "pawsy.fun", color: "#ff8ab4", type: 0 },
+] as any;
+
+const HERO = {
+  en: { badge: "Discord Rich Presence — for the open web", h1a: "Your aura,", h1b: "wherever you browse.", sub: "Tiny extension. Updates your Discord profile with whatever you're watching, listening to, or doing on the web. No account, no servers.", download: "Download", free: "Free · Chromium · No account · No DB", example_h: "Looks like this on your profile", popup_h: "And this is the extension", elapsed: "elapsed", open_btn: "Open in browser", feat_h: "Everything you need", plat_h: "By category", plat_sub: "Toggle anything you don't want from the popup.",
     feats: [
       { t: "Auto-detect", d: "60+ websites tracked in real time, grouped by category." },
       { t: "Custom activity", d: "Override with any text, image and type — live preview while you edit." },
       { t: "Privacy first", d: "Token stays in your browser. No telemetry, no DB, no account." },
+      { t: "Local dashboard", d: "Streaks, totals, top apps — all read locally from the extension." },
+      { t: "Pause anytime", d: "Snooze tracking with one click when you want to disappear." },
       { t: "Languages", d: "EN / PT / ES across the extension and the website." },
-    ],
-    plat_h: "By category",
-    plat_sub: "Toggle anything you don't want from the popup.",
-  },
-  pt: {
-    badge: "Discord Rich Presence — para a web aberta",
-    h1a: "A tua aura,", h1b: "em qualquer lado da web.",
-    sub: "Extensão pequena. Atualiza o teu perfil do Discord com o que estás a ver, ouvir ou fazer na web. Sem conta, sem servidores.",
-    download: "Descarregar", free: "Grátis · Chromium · Sem conta · Sem DB",
-    example_h: "Aparece assim no teu perfil",
-    ex_now: ["A ouvir no Spotify", "A ver no YouTube", "A jogar no GitHub", "A competir no LeetCode"],
-    feat_h: "Tudo o que precisas",
+    ] },
+  pt: { badge: "Discord Rich Presence — para a web aberta", h1a: "A tua aura,", h1b: "em qualquer lado da web.", sub: "Extensão pequena. Atualiza o teu perfil do Discord com o que estás a ver, ouvir ou fazer na web. Sem conta, sem servidores.", download: "Descarregar", free: "Grátis · Chromium · Sem conta · Sem DB", example_h: "Aparece assim no teu perfil", popup_h: "E assim na extensão", elapsed: "decorrido", open_btn: "Abrir no browser", feat_h: "Tudo o que precisas", plat_h: "Por categoria", plat_sub: "Desativa qualquer um que não queiras no popup.",
     feats: [
       { t: "Auto-deteção", d: "60+ sites em tempo real, agrupados por categoria." },
       { t: "Atividade custom", d: "Substitui com qualquer texto, imagem e tipo — preview ao vivo." },
       { t: "Privacidade", d: "O token fica no browser. Sem telemetria, sem DB, sem conta." },
+      { t: "Painel local", d: "Streaks, totais, top apps — tudo lido localmente da extensão." },
+      { t: "Pausa quando quiseres", d: "Snooze do tracking com um clique para desapareceres." },
       { t: "Idiomas", d: "EN / PT / ES em toda a extensão e site." },
-    ],
-    plat_h: "Por categoria",
-    plat_sub: "Desativa qualquer um que não queiras no popup.",
-  },
-  es: {
-    badge: "Discord Rich Presence — para la web abierta",
-    h1a: "Tu aura,", h1b: "donde sea que navegues.",
-    sub: "Extensión pequeña. Actualiza tu perfil de Discord con lo que estás viendo, escuchando o haciendo en la web. Sin cuenta, sin servidores.",
-    download: "Descargar", free: "Gratis · Chromium · Sin cuenta · Sin DB",
-    example_h: "Se ve así en tu perfil",
-    ex_now: ["Escuchando en Spotify", "Viendo YouTube", "Jugando en GitHub", "Compitiendo en LeetCode"],
-    feat_h: "Todo lo que necesitas",
+    ] },
+  es: { badge: "Discord Rich Presence — para la web abierta", h1a: "Tu aura,", h1b: "donde sea que navegues.", sub: "Extensión pequeña. Actualiza tu perfil de Discord con lo que estás viendo, escuchando o haciendo en la web. Sin cuenta, sin servidores.", download: "Descargar", free: "Gratis · Chromium · Sin cuenta · Sin DB", example_h: "Se ve así en tu perfil", popup_h: "Y así en la extensión", elapsed: "transcurrido", open_btn: "Abrir en navegador", feat_h: "Todo lo que necesitas", plat_h: "Por categoría", plat_sub: "Desactiva cualquiera que no quieras en el popup.",
     feats: [
       { t: "Auto-detección", d: "60+ sitios en tiempo real, agrupados por categoría." },
       { t: "Actividad custom", d: "Sustituye con cualquier texto, imagen y tipo — vista previa en vivo." },
       { t: "Privacidad", d: "El token queda en el navegador. Sin telemetría, sin DB, sin cuenta." },
+      { t: "Panel local", d: "Rachas, totales, top apps — todo leído localmente de la extensión." },
+      { t: "Pausa cuando quieras", d: "Snooze del tracking con un clic para desaparecer." },
       { t: "Idiomas", d: "EN / PT / ES en toda la extensión y el sitio." },
-    ],
-    plat_h: "Por categoría",
-    plat_sub: "Desactiva cualquiera que no quieras en el popup.",
-  },
-};
+    ] },
+} as const;
 
 type Cat = { name: { en: string; pt: string; es: string }; items: { n: string; h: string }[] };
 const CATEGORIES: Cat[] = [
