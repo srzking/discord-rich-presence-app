@@ -266,8 +266,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       else await pushPresence();
       sendResponse({ ok: true });
     } else if (msg.type === "status:get") {
-      const { botUser, lastError, trackedByApp = {} } = await chrome.storage.local.get(["botUser","lastError","trackedByApp"]);
-      sendResponse({ connected: identified, activity: lastActivity, botUser, lastError, trackedByApp });
+      const { botUser, lastError, trackedByApp = {}, trackedToday = {}, pausedUntil } = await chrome.storage.local.get(["botUser","lastError","trackedByApp","trackedToday","pausedUntil"]);
+      sendResponse({ connected: identified, activity: lastActivity, botUser, lastError, trackedByApp, trackedToday, pausedUntil });
+    } else if (msg.type === "pause:set") {
+      await chrome.storage.local.set({ pausedUntil: msg.until || 0 });
+      await pushPresence();
+      sendResponse({ ok: true });
     } else if (msg.type === "presence:clear") {
       lastActivity = null; await pushPresence(); sendResponse({ ok: true });
     } else if (msg.type === "disconnect") {
