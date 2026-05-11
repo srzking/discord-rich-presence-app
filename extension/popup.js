@@ -282,6 +282,18 @@ $("#clearCustom").addEventListener("click", async () => {
 });
 
 $("#clear").addEventListener("click", () => chrome.runtime.sendMessage({ type: "presence:clear" }, refreshStatus));
+
+// Pause / Resume
+$$(".pause-btn").forEach(b => b.addEventListener("click", () => {
+  const v = b.dataset.pause;
+  let until;
+  if (v === "today") {
+    const d = new Date(); d.setHours(24, 0, 0, 0); until = d.getTime();
+  } else { until = Date.now() + parseInt(v, 10) * 60_000; }
+  chrome.runtime.sendMessage({ type: "pause:set", until }, refreshStatus);
+}));
+$("#resumeBtn")?.addEventListener("click", () => chrome.runtime.sendMessage({ type: "pause:set", until: 0 }, refreshStatus));
+
 $("#disconnectBtn").addEventListener("click", () => chrome.runtime.sendMessage({ type: "disconnect" }, () => { refreshStatus(); load(); }));
 
 $("#appSearch").addEventListener("input", renderPlatforms);
