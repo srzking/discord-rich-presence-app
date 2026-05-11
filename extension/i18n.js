@@ -43,7 +43,7 @@ const I18N = {
     cat_furry: "Furry & Community", cat_gaming: "Gaming", cat_shopping: "Shopping", cat_other: "Other",
     logs_filter: "Filter logs…", account_section: "Account", about_section: "About",
     appearance: "Appearance", theme: "Theme", themeDark: "Dark", themeLight: "Light",
-    behavior: "Behavior",
+    behavior: "Behavior",, pause: "Pause", paused: "Paused", resume: "Resume", pause15: "15 min", pause60: "1 hour", pauseToday: "Until tomorrow", streak: "Streak", allTime: "All time", days: "d"
   },
   pt: {
     enable: "Ativar / desativar",
@@ -88,7 +88,7 @@ const I18N = {
     cat_furry: "Furry e Comunidade", cat_gaming: "Jogos", cat_shopping: "Compras", cat_other: "Outros",
     logs_filter: "Filtrar registos…", account_section: "Conta", about_section: "Sobre",
     appearance: "Aparência", theme: "Tema", themeDark: "Escuro", themeLight: "Claro",
-    behavior: "Comportamento",
+    behavior: "Comportamento",, pause: "Pausar", paused: "Em pausa", resume: "Retomar", pause15: "15 min", pause60: "1 hora", pauseToday: "Até amanhã", streak: "Sequência", allTime: "Total", days: "d"
   },
   es: {
     enable: "Activar / desactivar",
@@ -133,7 +133,7 @@ const I18N = {
     cat_furry: "Furry y Comunidad", cat_gaming: "Juegos", cat_shopping: "Compras", cat_other: "Otros",
     logs_filter: "Filtrar registros…", account_section: "Cuenta", about_section: "Acerca de",
     appearance: "Apariencia", theme: "Tema", themeDark: "Oscuro", themeLight: "Claro",
-    behavior: "Comportamiento",
+    behavior: "Comportamiento",, pause: "Pausar", paused: "En pausa", resume: "Reanudar", pause15: "15 min", pause60: "1 hora", pauseToday: "Hasta mañana", streak: "Racha", allTime: "Total", days: "d"
   }
 };
 function __aura_t(lang, key) { return (I18N[lang] || I18N.en)[key] || I18N.en[key] || key; }
