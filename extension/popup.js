@@ -26,6 +26,8 @@ const PLATFORMS = [
   ["pawsy","Pawsy","furry","pawsy.fun"],["furaffinity","FurAffinity","furry","furaffinity.net"],["e621","e621","furry","e621.net"],
   ["roblox","Roblox","gaming","roblox.com"],["itchio","itch.io","gaming","itch.io"],["epic","Epic Games","gaming","epicgames.com"],
   ["amazon","Amazon","shopping","amazon.com"],["ebay","eBay","shopping","ebay.com"],["aliexpress","AliExpress","shopping","aliexpress.com"],
+  ["appletv","Apple TV+","streaming","tv.apple.com"],["hotstar","Hotstar","streaming","hotstar.com"],["paramount","Paramount+","streaming","paramountplus.com"],
+  ["yandexmusic","Yandex Music","music","music.yandex.com"],
 ];
 
 const CATEGORIES = ["streaming","music","dev","ai","social","gaming","furry","learning","productivity","shopping","other"];
