@@ -58,6 +58,10 @@
         <option value="invisible" data-i18n="invisible">⚫ Invisible</option>
       </select>
     </div>
+    <div id="pausedBanner" class="paused-banner hidden">
+      <span>⏸ <span data-i18n="paused">Paused</span> · <span id="pausedUntil">—</span></span>
+      <button id="resumeBtn" class="mini" data-i18n="resume">Resume</button>
+    </div>
     <div class="now-card">
       <div class="now-head">
         <img id="actThumb" class="thumb hidden" alt="" />
@@ -69,11 +73,18 @@
         </div>
       </div>
     </div>
-    <div class="stats">
+    <div class="stats stats-3">
       <div><span class="muted small" data-i18n="todayTracked">Tracked today</span><strong id="todayMin">0</strong> <span data-i18n="minutes">min</span></div>
+      <div><span class="muted small" data-i18n="streak">Streak</span><strong id="streakNum">0</strong> <span data-i18n="days">d</span></div>
+      <div><span class="muted small" data-i18n="allTime">All time</span><strong id="allTimeNum">0</strong> <span data-i18n="minutes">min</span></div>
     </div>
     <div class="muted small" style="margin-top:10px" data-i18n="topApps">Top apps today</div>
     <div id="topApps" class="top-apps"></div>
+    <div class="row pause-row">
+      <button class="ghost pause-btn" data-pause="15">⏸ <span data-i18n="pause15">15 min</span></button>
+      <button class="ghost pause-btn" data-pause="60"><span data-i18n="pause60">1 hour</span></button>
+      <button class="ghost pause-btn" data-pause="today"><span data-i18n="pauseToday">Until tomorrow</span></button>
+    </div>
     <button id="clear" class="ghost full" data-i18n="clearPresence">Clear presence</button>
   </section>
 

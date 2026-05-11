@@ -175,6 +175,12 @@ async function buildPresence(activity) {
   const cfg = await getCfg();
   const status = userIdle && cfg.idleAway ? "idle" : (cfg.status || "online");
 
+  // Pause check
+  const { pausedUntil } = await chrome.storage.local.get("pausedUntil");
+  if (pausedUntil && pausedUntil > Date.now()) {
+    return { since: 0, activities: [], status, afk: false };
+  }
+
   let act = activity;
   if (cfg.customText) {
     act = {
@@ -189,7 +195,6 @@ async function buildPresence(activity) {
   if (act && cfg.disabledPlatforms?.includes(act.id)) act = null;
   if (!act) return { since: 0, activities: [], status, afk: false };
 
-  // Resolve large image: register external URL with Discord proxy if appId set.
   let largeImage;
   if (cfg.showThumbnails !== false && act.thumbnail && cfg.appId) {
     largeImage = await registerExternalAsset(cfg.appId, act.thumbnail);
@@ -261,8 +266,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       else await pushPresence();
       sendResponse({ ok: true });
     } else if (msg.type === "status:get") {
-      const { botUser, lastError, trackedByApp = {} } = await chrome.storage.local.get(["botUser","lastError","trackedByApp"]);
-      sendResponse({ connected: identified, activity: lastActivity, botUser, lastError, trackedByApp });
+      const { botUser, lastError, trackedByApp = {}, trackedToday = {}, pausedUntil } = await chrome.storage.local.get(["botUser","lastError","trackedByApp","trackedToday","pausedUntil"]);
+      sendResponse({ connected: identified, activity: lastActivity, botUser, lastError, trackedByApp, trackedToday, pausedUntil });
+    } else if (msg.type === "pause:set") {
+      await chrome.storage.local.set({ pausedUntil: msg.until || 0 });
+      await pushPresence();
+      sendResponse({ ok: true });
     } else if (msg.type === "presence:clear") {
       lastActivity = null; await pushPresence(); sendResponse({ ok: true });
     } else if (msg.type === "disconnect") {

@@ -26,6 +26,8 @@ const PLATFORMS = [
   ["pawsy","Pawsy","furry","pawsy.fun"],["furaffinity","FurAffinity","furry","furaffinity.net"],["e621","e621","furry","e621.net"],
   ["roblox","Roblox","gaming","roblox.com"],["itchio","itch.io","gaming","itch.io"],["epic","Epic Games","gaming","epicgames.com"],
   ["amazon","Amazon","shopping","amazon.com"],["ebay","eBay","shopping","ebay.com"],["aliexpress","AliExpress","shopping","aliexpress.com"],
+  ["appletv","Apple TV+","streaming","tv.apple.com"],["hotstar","Hotstar","streaming","hotstar.com"],["paramount","Paramount+","streaming","paramountplus.com"],
+  ["yandexmusic","Yandex Music","music","music.yandex.com"],
 ];
 
 const CATEGORIES = ["streaming","music","dev","ai","social","gaming","furry","learning","productivity","shopping","other"];
@@ -127,9 +129,20 @@ function refreshStatus() {
   chrome.runtime.sendMessage({ type: "status:get" }, async (res) => {
     if (chrome.runtime.lastError || !res) return;
     const pill = $("#statusPill");
-    setText(pill, __aura_t(lang, res.connected ? "connected" : "offline"));
-    pill.className = "pill " + (res.connected ? "on" : "off");
+    const isPaused = res.pausedUntil && res.pausedUntil > Date.now();
+    setText(pill, __aura_t(lang, isPaused ? "paused" : (res.connected ? "connected" : "offline")));
+    pill.className = "pill " + (isPaused ? "off" : (res.connected ? "on" : "off"));
     renderBot(res.botUser, res.connected);
+
+    const banner = $("#pausedBanner");
+    if (banner) {
+      if (isPaused) {
+        banner.classList.remove("hidden");
+        const remain = Math.max(0, Math.round((res.pausedUntil - Date.now()) / 60000));
+        setText($("#pausedUntil"), remain > 60 ? `${Math.round(remain/60)}h` : `${remain}m`);
+      } else banner.classList.add("hidden");
+    }
+
     const a = res.activity;
     setText($("#actName"), a ? a.name : "—");
     setText($("#actDetails"), a?.details || "");
@@ -137,9 +150,24 @@ function refreshStatus() {
     const thumb = $("#actThumb");
     if (a?.thumbnail) { setSrc(thumb, a.thumbnail); thumb.classList.remove("hidden"); }
     else thumb.classList.add("hidden");
-    const { trackedToday = {} } = await chrome.storage.local.get("trackedToday");
+
+    const trackedToday = res.trackedToday || {};
     const today = new Date().toISOString().slice(0,10);
     setText($("#todayMin"), String(Math.round((trackedToday[today] || 0) / 60)));
+
+    // Streak
+    let streak = 0;
+    for (let i = 0; i < 365; i++) {
+      const dt = new Date(); dt.setDate(dt.getDate() - i);
+      const k = dt.toISOString().slice(0,10);
+      if ((trackedToday[k] || 0) > 60) streak++; else break;
+    }
+    setText($("#streakNum"), String(streak));
+
+    // All-time
+    const allMin = Math.round(Object.values(trackedToday).reduce((x,y) => x + y, 0) / 60);
+    setText($("#allTimeNum"), String(allMin));
+
     const top = $("#topApps");
     if (top) {
       const entries = Object.entries(res.trackedByApp || {})
@@ -151,9 +179,11 @@ function refreshStatus() {
         : (() => {
             const max = entries[0][1];
             return entries.map(([id,sec]) => {
-              const name = (PLATFORMS.find(p=>p[0]===id)||[id,id])[1];
+              const p = PLATFORMS.find(p=>p[0]===id);
+              const name = p ? p[1] : id;
+              const host = p ? p[3] : "";
               const pct = Math.max(8, Math.round(sec/max*100));
-              return `<div class="ta-row"><span>${name}</span><span class="ta-bar"><span style="width:${pct}%"></span></span><span class="muted small">${Math.round(sec/60)}m</span></div>`;
+              return `<div class="ta-row"><img class="ta-ico" src="${favicon(host)}" onerror="this.style.visibility='hidden'"/><span>${name}</span><span class="ta-bar"><span style="width:${pct}%"></span></span><span class="muted small">${Math.round(sec/60)}m</span></div>`;
             }).join("");
           })();
       if (top.dataset.html !== html) { top.innerHTML = html; top.dataset.html = html; }
@@ -254,6 +284,18 @@ $("#clearCustom").addEventListener("click", async () => {
 });
 
 $("#clear").addEventListener("click", () => chrome.runtime.sendMessage({ type: "presence:clear" }, refreshStatus));
+
+// Pause / Resume
+$$(".pause-btn").forEach(b => b.addEventListener("click", () => {
+  const v = b.dataset.pause;
+  let until;
+  if (v === "today") {
+    const d = new Date(); d.setHours(24, 0, 0, 0); until = d.getTime();
+  } else { until = Date.now() + parseInt(v, 10) * 60_000; }
+  chrome.runtime.sendMessage({ type: "pause:set", until }, refreshStatus);
+}));
+$("#resumeBtn")?.addEventListener("click", () => chrome.runtime.sendMessage({ type: "pause:set", until: 0 }, refreshStatus));
+
 $("#disconnectBtn").addEventListener("click", () => chrome.runtime.sendMessage({ type: "disconnect" }, () => { refreshStatus(); load(); }));
 
 $("#appSearch").addEventListener("input", renderPlatforms);
