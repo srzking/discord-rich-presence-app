@@ -240,3 +240,13 @@ details.sect[open] > summary { margin-bottom: 6px; }
 .log-warn { color: var(--yellow); }
 .log-info { color: var(--text); }
 .log-debug { color: var(--muted); }
+
+/* v1.7 additions */
+.stats.stats-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+.stats.stats-3 > div { background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:8px; padding:8px 6px; text-align:center; }
+.stats.stats-3 strong { display:block; font-size:18px; margin-top:2px; }
+.paused-banner { display:flex; align-items:center; justify-content:space-between; gap:8px; background:rgba(250,166,26,.1); border:1px solid rgba(250,166,26,.3); color:#FAA61A; padding:8px 10px; border-radius:8px; margin:8px 0; font-size:12px; }
+.row.pause-row { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:8px 0; }
+.pause-btn { font-size:11px !important; padding:6px 4px !important; }
+.ta-row { display:grid; grid-template-columns:14px 1fr 60px auto; gap:6px; align-items:center; padding:3px 0; font-size:12px; }
+.ta-ico { width:14px; height:14px; border-radius:3px; }
